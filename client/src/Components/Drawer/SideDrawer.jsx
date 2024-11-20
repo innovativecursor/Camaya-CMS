@@ -20,29 +20,9 @@ const menu = [
     link: "/viewproducts",
   },
   {
-    text: "View Users",
-    link: "/viewusers",
-  },
-  {
     text: "Filter Menu",
     link: "/filtermenu",
   },
-  {
-    text: "Create Award",
-    link: "/createawards",
-  },
-  // {
-  //   text: "Update Award",
-  //   link: "/updateawards",
-  // },
-  {
-    text: "Delete Award",
-    link: "/deleteawards",
-  },
-  // {
-  //   text: "Catalogue Management",
-  //   link: "/cataloguemanagement",
-  // },
 ];
 function SideDrawer() {
   const [open, setOpen] = useState(false);
