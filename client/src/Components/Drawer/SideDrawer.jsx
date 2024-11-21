@@ -4,24 +4,32 @@ import { FaArrowRight } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 const menu = [
   {
-    text: "Add Product",
-    link: "/addproduct",
+    text: "Add Property",
+    link: "/addproperty",
   },
   {
-    text: "Update Product",
-    link: "/updateproduct",
+    text: "Update Property",
+    link: "/updateproperty",
   },
   {
-    text: "Delete Product",
-    link: "/deleteproduct",
+    text: "Delete Property",
+    link: "/deleteproperty",
   },
   {
-    text: "View Products",
-    link: "/viewproducts",
+    text: "View Properties",
+    link: "/viewproperty",
   },
   {
     text: "Filter Menu",
     link: "/filtermenu",
+  },
+  {
+    text: "Add Testimonials",
+    link: "/createTestimonials",
+  },
+  {
+    text: "Delete Testimonial",
+    link: "/deleteTestimonials",
   },
 ];
 function SideDrawer() {

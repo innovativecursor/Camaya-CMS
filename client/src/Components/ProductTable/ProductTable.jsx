@@ -8,15 +8,15 @@ import { useNavigate } from "react-router-dom";
 function ProductTable(props) {
   const columns = [
     {
-      title: "Prd ID",
-      dataIndex: "prd_id",
-      key: "prd_id",
+      title: "Prop ID",
+      dataIndex: "prop_id",
+      key: "prop_id",
       fixed: "left",
     },
     {
-      title: "Exhibition Name",
-      dataIndex: "product_name",
-      key: "product_name",
+      title: "Property Name",
+      dataIndex: "prop_name",
+      key: "prop_name",
     },
     {
       title: "Location",
@@ -24,32 +24,23 @@ function ProductTable(props) {
       key: "location",
     },
     {
-      title: "Booth Size",
-      dataIndex: "booth_size",
-      key: "booth_size",
-    },
-    {
-      title: "Budget",
-      dataIndex: "budget",
-      key: "budget",
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
     },
   ];
-  const award_columns = [
+  const testimonials_col = [
     {
-      title: "Award Id",
-      dataIndex: "award_id",
-      key: "award_id",
+      title: "Testimonial Id",
+      dataIndex: "testimonial_id",
+      key: "testimonial_id",
       fixed: "left",
     },
+
     {
-      title: "Award Year",
-      dataIndex: "award_year",
-      key: "award_year",
-    },
-    {
-      title: "Award Title",
-      dataIndex: "award_title",
-      key: "award_title",
+      title: "Reviewer Name",
+      dataIndex: "reviewer_name",
+      key: "reviewer_name",
     },
   ];
   const [result, setResult] = useState(null);
@@ -64,18 +55,19 @@ function ProductTable(props) {
   }, [props]);
 
   const answer = async () => {
-    if (props?.type == "Awards" && props?.type) {
-      const result = await getAxiosCall("/getAward");
+    if (props?.type == "Testimonials" && props?.type) {
+      const result = await getAxiosCall("/fetchTestimonials");
       setResult(result?.data);
     } else {
-      const result = await getAxiosCall("/products");
-      setResult(result?.data?.products);
+
+      const result = await getAxiosCall("/properties");
+      setResult(result?.data?.properties);
     }
   };
   return (
     <>
-      {props?.type != "Awards" ? (
-        <PageWrapper title={`${props.pageMode} Products`}>
+      {props?.type != "Testimonials" ? (
+        <PageWrapper title={`${props.pageMode} Properties`}>
           <Table
             columns={columns}
             dataSource={result}
@@ -104,32 +96,19 @@ function ProductTable(props) {
           />
         </PageWrapper>
       ) : (
-        <PageWrapper title={`${props.pageMode} Award`}>
-          <Table
-            columns={award_columns}
-            dataSource={result}
-            size="large"
-            // style={{
-            //   width: "100rem",
-            // }}
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: () => {
-                  navigateTo(
-                    props.pageMode === "Delete"
-                      ? "/deleteawardinner"
-                      : "/updateawardinner",
-                    { state: record }
-                  );
-                },
-              };
-            }}
-            scroll={{
-              x: 1000,
-              y: 1500,
-            }}
-          />
-        </PageWrapper>
+        <PageWrapper title={`${props.type}`}>
+        <Table
+          columns={testimonials_col}
+          dataSource={result}
+          size="large"
+          onRow={(record) => ({
+            onClick: () => {
+              navigateTo("/deleteTestimonialsinner", { state: record });
+            },
+          })}
+          scroll={{ x: 1000, y: 1500 }}
+        />
+      </PageWrapper>
       )}
     </>
   );

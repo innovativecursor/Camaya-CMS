@@ -19,11 +19,11 @@ exports.getProperties = async (req, res) => {
     if (price) filter.price = price;
 
     // Add functional requirements to the filter
-    Object.keys(functionalReq).forEach((key) => {
-      if (functionalReq[key] === "true") {
-        filter[key] = true;
-      }
-    });
+    // Object.keys(functionalReq).forEach((key) => {
+    //   if (functionalReq[key] === "true") {
+    //     filter[key] = true;
+    //   }
+    // });
 
     const properties = await Property.findAll({ where: filter });
     res.status(200).json({ properties });

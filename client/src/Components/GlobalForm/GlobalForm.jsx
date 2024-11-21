@@ -33,62 +33,21 @@ const { TextArea } = Input;
 function GlobalForm(props) {
   const [loading, setLoading] = useState(false);
   const [imageArray, setImageArray] = useState([]);
-  const [checkboxValues, setCheckboxValues] = useState();
-  const [checkboxWebsiteValues, setCheckboxWebsiteValues] = useState();
   const [inputs, setInputs] = useState({});
   const [locationOptions, setLocationOptions] = useState();
   const [pricingOptions, setPricingOptions] = useState();
   const [imageClone, setImageClone] = useState(props?.record?.pictures);
-  const [awardImages, setAwardImages] = useState(props?.record?.award_pictures);
-  const [options, setOptions] = useState([]);
-  const [websiteInfoOptions, setWebsiteInfoOptions] = useState([]);
-  // const [yearOptions, setYearOptions] = useState();
+  const [company_testimonialImage, setCompany_testimonialImage] = useState(
+    props?.record?.pictures
+  );
   const NavigateTo = useNavigate();
-  const currentYear = new Date().getFullYear();
-  const yearOptions = Array.from({ length: 100 }, (_, i) => {
-    const year = currentYear - i;
-    return { value: year, label: year.toString() };
-  });
-
   useEffect(() => {
     callingOptions();
     if (props?.record) {
       setInputs(props.record);
     }
   }, []);
-  // loading the functional Req and then loading the values
-  useEffect(() => {
-    if (props?.record) {
-      const trueFunctionalRequirements = extractTrueFunctionalRequirements(
-        props?.record,
-        options
-      );
-      setCheckboxValues(trueFunctionalRequirements);
-    }
-  }, [options]);
-  // loading the Website Info Req and then loading the values
-  useEffect(() => {
-    if (props?.record) {
-      const trueFunctionalRequirements = extractTrueFunctionalRequirements(
-        props?.record,
-        websiteInfoOptions
-      );
-      setCheckboxWebsiteValues(trueFunctionalRequirements);
-    }
-  }, [websiteInfoOptions]);
-  function extractTrueFunctionalRequirements(input, options) {
-    const result = [];
-    if (options.length != 0) {
-      options.forEach((option) => {
-        const key = option?.value;
-        if (input[key] === true) {
-          result.push(key);
-        }
-      });
 
-      return result;
-    }
-  }
   const callingOptions = async () => {
     const resProperties = await getAxiosCall("/propertyOptions");
     if (resProperties) {
@@ -115,73 +74,18 @@ function GlobalForm(props) {
       setLocationOptions(collection);
     }
   };
-  const onChange = (checkedValues) => {
-    setCheckboxValues(checkedValues);
-    // Create an updated inputs object based on checkedValues
-    const updatedInputs = options.reduce((acc, option) => {
-      acc[option.value] = checkedValues.includes(option.value);
-      return acc;
-    }, {});
-    setInputs((prevInputs) => ({
-      ...prevInputs,
-      ...updatedInputs,
-    }));
-  };
-  const onChange_webInfo = (checkedValues) => {
-    setCheckboxWebsiteValues(checkedValues);
+  const beforeUpload = (file) => {
+    const isValidType = ["image/png", "image/jpeg", "image/webp"].includes(
+      file.type
+    );
 
-    // Create an updated inputs object based on checkedValues
-    const updatedInputs = websiteInfoOptions.reduce((acc, option) => {
-      acc[option.value] = checkedValues.includes(option.value);
-      return acc;
-    }, {});
-    setInputs((prevInputs) => ({
-      ...prevInputs,
-      ...updatedInputs,
-    }));
+    if (!isValidType) {
+      message.error("You can only upload PNG, JPG, JPEG, or WEBP files!");
+      return;
+    }
+
+    return isValidType; // Return false to prevent the upload if the file type is not valid
   };
-  // const options = [
-  //   {
-  //     label: "Bar Area",
-  //     value: "bar_area",
-  //   },
-  //   {
-  //     label: "Hanging sign",
-  //     value: "hanging_sign",
-  //   },
-  //   {
-  //     label: "LED Video Wall",
-  //     value: "led_video_wall",
-  //   },
-  //   {
-  //     label: "Lounge Area",
-  //     value: "longue_area",
-  //   },
-  //   {
-  //     label: "Product Display",
-  //     value: "product_display",
-  //   },
-  //   {
-  //     label: "Reception Counter",
-  //     value: "reception_counter",
-  //   },
-  //   {
-  //     label: "Semi Closed Meeting Area",
-  //     value: "semi_closed_meeting_area",
-  //   },
-  //   {
-  //     label: "Storage Room",
-  //     value: "storage_room",
-  //   },
-  //   {
-  //     label: "Theatre Style Demo",
-  //     value: "theatre_style_demo",
-  //   },
-  //   {
-  //     label: "Touch Screen Kiosk",
-  //     value: "touch_screen_kiosk",
-  //   },
-  // ];
   const getBase64 = (file) =>
     new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -232,17 +136,6 @@ function GlobalForm(props) {
         });
         return;
       }
-    } else {
-      if (!inputs?.award_title || !inputs?.award_year) {
-        Swal.fire({
-          title: "error",
-          text: "Award Title and Award Year are mandatory fields",
-          icon: "error",
-          confirmButtonText: "Alright!",
-          allowOutsideClick: false,
-        });
-        return;
-      }
     }
     try {
       switch (props.pageMode) {
@@ -263,7 +156,7 @@ function GlobalForm(props) {
           if (!props?.type) {
             answer = await postAxiosCall("/createproduct", inputs);
           } else {
-            answer = await postAxiosCall("/addAward", inputs);
+            answer = await postAxiosCall("/createTestimonial", inputs);
           }
           if (answer) {
             Swal.fire({
@@ -339,10 +232,10 @@ function GlobalForm(props) {
   };
   const remove = async () => {
     let answer;
-    if (props?.type != "Awards" && props?.type) {
-      answer = await deleteAxiosCall("/products", props?.record?.prd_id);
+    if (props?.type != "Testimonials" && props?.type) {
+      answer = await deleteAxiosCall("/property", props?.record?.prop_id);
     } else {
-      answer = await deleteAxiosCall("/deleteAward", props?.record?.award_id);
+      answer = await deleteAxiosCall("/deleteTestimonial", props?.record?.testimonial_id);
     }
     if (answer) {
       Swal.fire({
@@ -397,9 +290,9 @@ function GlobalForm(props) {
                       }
                       required
                       type="text"
-                      id="product_name"
-                      placeholder="Product Name"
-                      name="product_name"
+                      id="prop_name"
+                      placeholder="Property Name"
+                      name="prop_name"
                       className="mt-1 p-2 block w-full border rounded-md"
                       onChange={(e) => {
                         setInputs({
@@ -407,7 +300,7 @@ function GlobalForm(props) {
                           [e.target.name]: e.target.value,
                         });
                       }}
-                      value={inputs?.product_name}
+                      value={inputs?.prop_name}
                     />
                   </div>
 

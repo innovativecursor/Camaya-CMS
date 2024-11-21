@@ -24,10 +24,8 @@ import Categories from "../Categories/Categories";
 import AddProduct from "../Components/createProd/AddProduct";
 import ResetPassword from "../Components/resetPassword/ResetPassword";
 import FilterMenu from "../Components/filterMenu/FilterMenu";
-import Awards from "../Components/CreateAward/CreateAwards";
-import CreateAwards from "../Components/CreateAward/CreateAwards";
-import UpdateAwards from "../UpdateAwards/UpdateAwards";
-import DeleteAwards from "../DeleteAwards/DeleteAwards";
+import CreateTestimonials from "../Components/createTestimonials/CreateTestimonials";
+import DeleteTestimonials from "../Components/DeleteTestimonials/DeleteTestimonials";
 
 function Navigation(props) {
   const location = useLocation();
@@ -59,36 +57,35 @@ function Navigation(props) {
             <Route path="/reset/:token" element={<ResetPassword />} />
             <Route element={<PrivateRoute />}>
               <Route path="/home" element={<Home />} />
-              <Route path="/addproduct" element={<AddProduct />} />
+              <Route path="/addproperty" element={<AddProduct />} />
               <Route
-                path="/deleteproduct"
+                path="/deleteproperty"
                 element={<ProductTable pageMode="Delete" />}
               />
               <Route path="/deleteinner" element={<DeleteInner />} />
               <Route
-                path="/viewproducts"
+                path="/viewproperty"
                 element={<ProductTable pageMode="View" />}
               />
               <Route path="/viewinner" element={<ViewInner />} />
               <Route
-                path="/updateproduct"
+                path="/updateproperty"
                 element={<ProductTable pageMode="Update" />}
               />
               <Route path="/updateinner" element={<UpdateInner />} />
               <Route path="/filtermenu" element={<FilterMenu />} />
-              <Route path="/createawards" element={<CreateAwards />} />
-              {/* <Route
-                path="/updateawards"
-                element={<ProductTable pageMode="Update" type="Awards" />}
-              /> */}
-              {/* <Route path="/updateawardinner" element={<UpdateAwards />} /> */}
-              <Route path="/deleteawardinner" element={<DeleteAwards />} />
               <Route
-                path="/deleteawards"
-                element={<ProductTable pageMode="Delete" type="Awards" />}
+                path="/createTestimonials"
+                element={<CreateTestimonials />}
               />
-              <Route path="/cms" element={<CMS />} />
-              <Route path="/categories" element={<Categories />} />
+              <Route
+                path="/deleteTestimonials"
+                element={<ProductTable pageMode="Delete" type="Testimonials" />}
+              />
+              <Route
+                path="/deleteTestimonialsinner"
+                element={<DeleteTestimonials />}
+              />
             </Route>
             <Route path="*" element={<Robots />} />
           </Routes>

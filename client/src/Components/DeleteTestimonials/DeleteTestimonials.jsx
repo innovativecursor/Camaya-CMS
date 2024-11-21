@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import GlobalForm from "../Components/GlobalForm/GlobalForm";
 import { useLocation } from "react-router-dom";
+import GlobalForm from "../GlobalForm/GlobalForm";
 
-function UpdateAwards() {
+function DeleteTestimonials() {
   const location = useLocation();
   const [record, setRecord] = useState(location.state);
   useEffect(() => {
@@ -15,10 +15,10 @@ function UpdateAwards() {
   return (
     <>
       {record ? (
-        <GlobalForm pageMode="Update" type="Awards" record={record} />
+        <GlobalForm pageMode="Delete" type="Testimonials" record={record} />
       ) : null}
     </>
   );
 }
 
-export default UpdateAwards;
+export default DeleteTestimonials;
