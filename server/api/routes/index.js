@@ -15,8 +15,8 @@ router.get("/users", authenticateUser, userController.allUsers);
 
 //For Selectable Options
 router.get("/locationOptions", propertyController.getLocationOptions);
-router.get("/propertyOptions", propertyController.getPropertyOptions);
-router.get("/pricingOptions", propertyController.getPricingOptions);
+// router.get("/propertyOptions", propertyController.getPropertyOptions);
+// router.get("/pricingOptions", propertyController.getPricingOptions);
 // Property routes
 router.get("/properties", propertyController.getProperties);
 router.post(

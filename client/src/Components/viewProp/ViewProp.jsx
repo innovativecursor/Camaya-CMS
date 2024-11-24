@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import GlobalForm from "../GlobalForm/GlobalForm";
 
-function ViewInner() {
+function ViewProp() {
   const location = useLocation();
   const [record, setRecord] = useState(location.state);
   useEffect(() => {
@@ -16,4 +16,4 @@ function ViewInner() {
   return <>{record ? <GlobalForm pageMode="View" record={record} /> : null}</>;
 }
 
-export default ViewInner;
+export default ViewProp;

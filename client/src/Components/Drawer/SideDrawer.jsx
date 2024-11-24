@@ -53,7 +53,7 @@ function SideDrawer() {
         </div>
       </button>
       <Drawer
-        title="PropShop Worldwide Action Menu"
+        title="Camaya Action Menu"
         placement={placement}
         width={500}
         onClose={onClose}

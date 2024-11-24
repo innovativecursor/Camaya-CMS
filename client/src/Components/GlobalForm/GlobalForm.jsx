@@ -49,30 +49,15 @@ function GlobalForm(props) {
   }, []);
 
   const callingOptions = async () => {
-    const resProperties = await getAxiosCall("/propertyOptions");
-    if (resProperties) {
-      const collection = resProperties.data?.map((el) => ({
-        label: el,
-        value: el,
-      }));
-      setLocationOptions(collection);
-    }
     const resLocation = await getAxiosCall("/locationOptions");
     if (resLocation) {
+      
       const collection = resLocation.data?.map((el) => ({
         label: el,
         value: el,
       }));
       setLocationOptions(collection);
-    }
-    const resPricing = await getAxiosCall("/pricingOptions");
-    if (resPricing) {
-      const collection = resPricing.data?.map((el) => ({
-        label: el,
-        value: el,
-      }));
-      setLocationOptions(collection);
-    }
+    }    
   };
   const beforeUpload = (file) => {
     const isValidType = ["image/png", "image/jpeg", "image/webp"].includes(
@@ -126,10 +111,10 @@ function GlobalForm(props) {
   // A submit form used for both (i.e.. Products & Awards)
   const submitForm = async () => {
     if (!props.type) {
-      if (!inputs?.location || !inputs?.booth_size || !inputs?.budget) {
+      if (!inputs?.prop_name || !inputs?.location || !inputs?.price) {
         Swal.fire({
           title: "error",
-          text: "Location, Booth Size and Budget are mandatory fields",
+          text: "Property Name, Location and Price are mandatory fields",
           icon: "error",
           confirmButtonText: "Alright!",
           allowOutsideClick: false,
@@ -154,7 +139,7 @@ function GlobalForm(props) {
           await convertAllToBase64();
           let answer;
           if (!props?.type) {
-            answer = await postAxiosCall("/createproduct", inputs);
+            answer = await postAxiosCall("/createProperty", inputs);
           } else {
             answer = await postAxiosCall("/createTestimonial", inputs);
           }
@@ -186,8 +171,8 @@ function GlobalForm(props) {
           await convertAllToBase64();
 
           const updatedResult = await updateAxiosCall(
-            "/products",
-            props?.record?.prd_id,
+            "/property",
+            props?.record?.prop_id,
             inputs
           );
           if (updatedResult) {
@@ -199,7 +184,7 @@ function GlobalForm(props) {
               allowOutsideClick: false,
             }).then(() => {
               setInputs();
-              NavigateTo("/updateproduct");
+              NavigateTo("/updateproperty");
             });
           }
           break;
@@ -246,7 +231,7 @@ function GlobalForm(props) {
         allowOutsideClick: false,
       });
       setInputs();
-      NavigateTo("/deleteproduct");
+      NavigateTo("/deleteproperty");
     }
   };
   const deleteImage = async (imageIndex) => {
@@ -351,18 +336,18 @@ function GlobalForm(props) {
                         `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                       }
                       parser={(value) => value?.replace(/\$\s?|(,*)/g, "")}
-                      placeholder="Budget"
+                      placeholder="Price"
                       className="w-full rounded-md"
                       size="large"
                       required
                       isMulti={false}
                       onChange={(e) => {
-                        setInputs({ ...inputs, budget: e });
+                        setInputs({ ...inputs, price: e });
                       }}
                       isClearable
                       options={pricingOptions?.length != 0 ? pricingOptions : []}
                       isSearchable
-                      value={inputs?.budget}
+                      value={inputs?.price}
                     />
                   </div>  
                 </div>

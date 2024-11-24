@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import GlobalForm from "../GlobalForm/GlobalForm";
 
-function DeleteInner() {
+function UpdateProp() {
   const location = useLocation();
   const [record, setRecord] = useState(location.state);
   useEffect(() => {
@@ -10,13 +10,12 @@ function DeleteInner() {
       "Location state", location.state;
       let asd = { ...location.state };
       setRecord(asd);
-      "record==>", record;
     }
   }, [location]);
 
   return (
-    <>{record ? <GlobalForm pageMode="Delete" record={record} /> : null}</>
+    <>{record ? <GlobalForm pageMode="Update" record={record} /> : null}</>
   );
 }
 
-export default DeleteInner;
+export default UpdateProp;

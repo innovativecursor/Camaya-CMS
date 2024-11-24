@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import { connect } from "react-redux";
 import CryptoJS from "crypto-js";
 import background from "../../assets/Images/background.jpg";
-import logo from "../../assets/Images/propshop_black.png";
+import logo from "../../assets/Images/Camaya.svg";
 import { postAxiosCall } from "../../Axios/UniversalAxiosCalls";
 
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
@@ -104,7 +104,9 @@ function Login(props) {
         }}
       >
         <div style={{ textAlign: "center", marginBottom: "20px" }}>
-          <img src={logo} alt="Logo" style={{ width: "150px" }} />
+          <div className="flex justify-center">
+          <img src={logo} alt="Logo"/>
+          </div>
         </div>
         <div
           className="text-3xl mb-4 font-semibold "

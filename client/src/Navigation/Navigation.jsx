@@ -13,15 +13,15 @@ import PrivateRoute from "./PrivateRoute";
 import SideDrawer from "../Components/Drawer/SideDrawer";
 import { matchRoutes, useLocation } from "react-router-dom";
 import Navbar from "../Components/NavigationBar/Navbar";
-import DeleteInner from "../Components/deleteProd/DeleteInner";
+import DeleteProp from "../Components/deleteProp/DeleteProp";
 import ProductTable from "../Components/ProductTable/ProductTable";
-import ViewInner from "../Components/viewProd/ViewInner";
-import UpdateInner from "../Components/updateProd/UpdateInner";
+import ViewProp from "../Components/viewProp/ViewProp";
+import UpdateProp from "../Components/updateProp/UpdateProp";
 import Robots from "../Components/Robots/Robots";
 import CatalogueManagement from "../Components/catalogueManagement/CatalogueManagement";
 import CMS from "../Components/cms/CMS";
 import Categories from "../Categories/Categories";
-import AddProduct from "../Components/createProd/AddProduct";
+import AddProduct from "../Components/createProp/AddProperty";
 import ResetPassword from "../Components/resetPassword/ResetPassword";
 import FilterMenu from "../Components/filterMenu/FilterMenu";
 import CreateTestimonials from "../Components/createTestimonials/CreateTestimonials";
@@ -60,19 +60,19 @@ function Navigation(props) {
               <Route path="/addproperty" element={<AddProduct />} />
               <Route
                 path="/deleteproperty"
-                element={<ProductTable pageMode="Delete" />}
+                element={<ProductTable pageMode="Delete" type="Property"/>}
               />
-              <Route path="/deleteinner" element={<DeleteInner />} />
+              <Route path="/deleteinner" element={<DeleteProp />} />
               <Route
                 path="/viewproperty"
-                element={<ProductTable pageMode="View" />}
+                element={<ProductTable pageMode="View" type="Property" />}
               />
-              <Route path="/viewinner" element={<ViewInner />} />
+              <Route path="/viewinner" element={<ViewProp />} />
               <Route
                 path="/updateproperty"
-                element={<ProductTable pageMode="Update" />}
+                element={<ProductTable pageMode="Update" type="Property" />}
               />
-              <Route path="/updateinner" element={<UpdateInner />} />
+              <Route path="/updateinner" element={<UpdateProp />} />
               <Route path="/filtermenu" element={<FilterMenu />} />
               <Route
                 path="/createTestimonials"

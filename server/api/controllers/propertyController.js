@@ -56,105 +56,67 @@ exports.getLocationOptions = async (req, res) => {
       .json({ message: "Failed to fetch locations", error: error.message });
   }
 };
-exports.getPropertyOptions = async (req,res)=>{
-  try {
-    // Fetch all unique properties from the Propertys table
-    const property = await Property.findAll({
-      attributes: [
-        [
-          Property.sequelize.fn("DISTINCT", Property.sequelize.col("prop_name")),
-          "prop_name",
-        ],
-      ],
-      order: [["prop_name", "ASC"]],
-    });
+// exports.getPropertyOptions = async (req,res)=>{
+//   try {
+//     // Fetch all unique properties from the Propertys table
+//     const property = await Property.findAll({
+//       attributes: [
+//         [
+//           Property.sequelize.fn("DISTINCT", Property.sequelize.col("prop_name")),
+//           "prop_name",
+//         ],
+//       ],
+//       order: [["prop_name", "ASC"]],
+//     });
 
-    // Extract the property from the result
-    const propertyList = property.map((el) => el.property);
+//     // Extract the property from the result
+//     const propertyList = property.map((el) => el.property);
 
-    res.status(200).json(propertyList);
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Failed to fetch properties", error: error.message });
-  }
-}
-exports.getPricingOptions = async (req,res)=>{
-  try {
-    // Fetch all unique Pricing from the Property table
-    const pricing = await Property.findAll({
-      attributes: [
-        [
-          Property.sequelize.fn("DISTINCT", Property.sequelize.col("price")),
-          "price",
-        ],
-      ],
-      order: [["price", "ASC"]],
-    });
+//     res.status(200).json(propertyList);
+//   } catch (error) {
+//     res
+//       .status(500)
+//       .json({ message: "Failed to fetch properties", error: error.message });
+//   }
+// }
+// exports.getPricingOptions = async (req,res)=>{
+//   try {
+//     // Fetch all unique Pricing from the Property table
+//     const pricing = await Property.findAll({
+//       attributes: [
+//         [
+//           Property.sequelize.fn("DISTINCT", Property.sequelize.col("price")),
+//           "price",
+//         ],
+//       ],
+//       order: [["price", "ASC"]],
+//     });
 
-    // Extract the Pricing from the result
-    const pricingList = pricing.map((el) => el.pricing);
+//     // Extract the Pricing from the result
+//     const pricingList = pricing.map((el) => el.pricing);
 
-    res.status(200).json(pricingList);
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Failed to fetch Pricing", error: error.message });
-  }
-}
+//     res.status(200).json(pricingList);
+//   } catch (error) {
+//     res
+//       .status(500)
+//       .json({ message: "Failed to fetch Pricing", error: error.message });
+//   }
+// }
 
 exports.createProperty = async (req, res) => {
   try {
     const {
-      Property_name,
+      prop_name,
       location,
-      booth_size,
-      budget,
-      closed_meeting_room,
-      demo_stations,
-      open_discussion_area,
-      bar_area,
-      hanging_sign,
-      led_video_wall,
-      longue_area,
-      Property_display,
-      reception_counter,
-      semi_closed_meeting_area,
-      storage_room,
-      theatre_style_demo,
-      touch_screen_kiosk,
-      showcase_Hero_section,
-      showcase_portfolio_section,
-      award_winning,
-      recent_work,
-      key_highlights,
+      price,
       description,
     } = req.body;
 
     // First, create the Property in the database to get its ID
     const newProperty = await Property.create({
-      Property_name,
+      prop_name,
       location,
-      booth_size,
-      budget,
-      closed_meeting_room,
-      demo_stations,
-      open_discussion_area,
-      bar_area,
-      hanging_sign,
-      led_video_wall,
-      longue_area,
-      Property_display,
-      reception_counter,
-      semi_closed_meeting_area,
-      storage_room,
-      theatre_style_demo,
-      touch_screen_kiosk,
-      showcase_Hero_section,
-      showcase_portfolio_section,
-      award_winning,
-      recent_work,
-      key_highlights,
+      price,
       description,
       pictures: [], // Initialize as empty array, we'll update it later
     });
