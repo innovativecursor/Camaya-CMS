@@ -21,11 +21,11 @@ import Robots from "../Components/Robots/Robots";
 import CatalogueManagement from "../Components/catalogueManagement/CatalogueManagement";
 import CMS from "../Components/cms/CMS";
 import Categories from "../Categories/Categories";
-import AddProduct from "../Components/createProp/AddProperty";
 import ResetPassword from "../Components/resetPassword/ResetPassword";
 import FilterMenu from "../Components/filterMenu/FilterMenu";
 import CreateTestimonials from "../Components/createTestimonials/CreateTestimonials";
 import DeleteTestimonials from "../Components/DeleteTestimonials/DeleteTestimonials";
+import CreateProduct from "../Components/createProp/CreateProperty";
 
 function Navigation(props) {
   const location = useLocation();
@@ -57,7 +57,7 @@ function Navigation(props) {
             <Route path="/reset/:token" element={<ResetPassword />} />
             <Route element={<PrivateRoute />}>
               <Route path="/home" element={<Home />} />
-              <Route path="/addproperty" element={<AddProduct />} />
+              <Route path="/addproperty" element={<CreateProduct />} />
               <Route
                 path="/deleteproperty"
                 element={<ProductTable pageMode="Delete" type="Property"/>}

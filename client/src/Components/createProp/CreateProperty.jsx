@@ -4,7 +4,7 @@ import GlobalForm from "../GlobalForm/GlobalForm";
 function CreateProduct() {
   return (
     <>
-      <GlobalForm pageMode="Add" />
+      <GlobalForm pageMode="Add" type="Property"  />
     </>
   );
 }

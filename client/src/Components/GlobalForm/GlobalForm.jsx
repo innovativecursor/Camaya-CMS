@@ -125,7 +125,7 @@ function GlobalForm(props) {
     try {
       switch (props.pageMode) {
         case "Add":
-          if (imageArray.length == 0) {
+          if (imageArray.length == 0 && props?.type !== "Testimonials") {
             Swal.fire({
               title: "error",
               text: "Add at least one Picture to proceed!",
@@ -133,28 +133,71 @@ function GlobalForm(props) {
               confirmButtonText: "Alright!",
               allowOutsideClick: false,
             });
-            return;
           }
-          // Converting images to base64
-          await convertAllToBase64();
-          let answer;
-          if (!props?.type) {
-            answer = await postAxiosCall("/createProperty", inputs);
-          } else {
-            answer = await postAxiosCall("/createTestimonial", inputs);
+          else{
+            // Converting images to base64
+            await convertAllToBase64();
           }
-          if (answer) {
-            Swal.fire({
-              title: "Success",
-              text: answer?.message,
-              icon: "success",
-              confirmButtonText: "Great!",
-              allowOutsideClick: false,
-            }).then(() => {
-              window.location.reload(true);
-            });
-            setInputs({});
+          if (props.type === "Testimonials") {
+            let dummyinput = inputs;
+            if (inputs?.pictures?.length === 0 || !inputs?.pictures) {
+              dummyinput = { ...inputs, pictures: [] };
+            }
+            let answer;
+            answer = await postAxiosCall("/createTestimonial", dummyinput);
+            if (answer) {
+              Swal.fire({
+                title: "Success",
+                text: answer?.message,
+                icon: "success",
+                confirmButtonText: "Great!",
+                allowOutsideClick: false,
+              }).then(() => {
+                window.location.reload(true);
+              });
+              setInputs({});
+            }
           }
+          
+          if (props.type === "Property") {
+            let dummyinput = inputs;
+            if (inputs?.pictures?.length === 0 || !inputs?.pictures) {
+              dummyinput = { ...inputs, pictures: [] };
+            }
+            let answer;
+
+            answer = await postAxiosCall("/createProperty", dummyinput);
+            if (answer) {
+              Swal.fire({
+                title: "Success",
+                text: answer?.message,
+                icon: "success",
+                confirmButtonText: "Great!",
+                allowOutsideClick: false,
+              }).then(() => {
+                window.location.reload(true);
+              });
+              setInputs({});
+            }
+          }
+          // let answer;
+          // if (!props?.type) {
+          //   answer = await postAxiosCall("/createProperty", inputs);
+          // } else {
+          //   answer = await postAxiosCall("/createTestimonial", inputs);
+          // }
+          // if (answer) {
+          //   Swal.fire({
+          //     title: "Success",
+          //     text: answer?.message,
+          //     icon: "success",
+          //     confirmButtonText: "Great!",
+          //     allowOutsideClick: false,
+          //   }).then(() => {
+          //     window.location.reload(true);
+          //   });
+          //   setInputs({});
+          // }
           break;
         case "Update":
           if (imageArray.length == 0 && imageClone.length == 0) {
@@ -482,6 +525,7 @@ function GlobalForm(props) {
                   onChange={(e) => {
                     setInputs({ ...inputs, [e.target.name]: e.target.value });
                   }}
+                  required
                   value={inputs?.reviewer_name}
                 />
               </div>
@@ -500,6 +544,7 @@ function GlobalForm(props) {
                   setInputs({ ...inputs, [e.target.name]: e.target.value });
                 }}
                 value={inputs?.review}
+                required
               />
             </div>
             {/* Upload Pictures */}
