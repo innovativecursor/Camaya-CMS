@@ -13,7 +13,7 @@ function Navbar(props) {
       <div className="container mx-auto">
         <div className="flex justify-between items-center">
           {/* Logo or Brand Name */}
-          <div className="w-28">
+          <div className="">
             <NavLink href="/" className="text-pink-200 text-3xl font-serif ">
               <img
                 src={logo}

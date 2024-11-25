@@ -14,9 +14,9 @@ router.post("/resetPassword", userController.resetPassword);
 router.get("/users", authenticateUser, userController.allUsers);
 
 //For Selectable Options
+router.get("/propertyOptions", propertyController.getPropertyOptions);
 router.get("/locationOptions", propertyController.getLocationOptions);
-// router.get("/propertyOptions", propertyController.getPropertyOptions);
-// router.get("/pricingOptions", propertyController.getPricingOptions);
+router.get("/pricingOptions", propertyController.getPricingOptions);
 // Property routes
 router.get("/properties", propertyController.getProperties);
 router.post(
@@ -34,7 +34,7 @@ router.delete(
 router.get("/fetchTestimonials", testimonialController.getTestimonials);
 router.post(
   "/createTestimonial",
-  authenticateUser,
+  authenticateUser, 
   testimonialController.createTestimonial
 );
 router.delete(
