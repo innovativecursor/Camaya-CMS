@@ -1,11 +1,15 @@
 const { Sequelize } = require("sequelize");
 
 // Initialize Sequelize with your database credentials
-const sequelize = new Sequelize("Camaya", "root", "root", {
-  dialect: "mysql", // or any other dialect
-  host: "localhost", // or your database host
-});
-
+const sequelize = new Sequelize(
+  "Camaya",
+  "root",
+  process.env.NODE_ENV == "development" ? "root" : "theWeekend@4166",
+  {
+    dialect: "mysql", // or any other dialect
+    host: "localhost", // or your database host
+  }
+);
 // Test the database connection
 sequelize
   .authenticate()

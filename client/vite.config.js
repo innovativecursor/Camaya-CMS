@@ -14,7 +14,7 @@ export default defineConfig({
   },
   define: {
     "process.env": {
-      REACT_APP_UAT_URL: "http://localhost:8080",
+      REACT_APP_UAT_URL: "http://api.camaya.innovativecursor.com",
       // REACT_APP_UAT_URL: "http://api.thepropshopworldwide.com",
       REACT_APP_ENCRYPTION: "WABBALABBA@3344$$1DUB43DUB",
     },
