@@ -25,7 +25,7 @@ const options = {
     // "http://localhost:8080",
   ],
 };
-app.use(cors(options));
+app.options("*", cors());
 app.use(
   bodyParser.urlencoded({
     extended: false,
