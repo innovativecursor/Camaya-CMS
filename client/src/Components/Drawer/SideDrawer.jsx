@@ -4,6 +4,10 @@ import { FaArrowRight } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 const menu = [
   {
+    text: "Inquiries",
+    link: "/inquiries",
+  },
+  {
     text: "Add Property",
     link: "/addproperty",
   },

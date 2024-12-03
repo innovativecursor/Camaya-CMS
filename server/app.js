@@ -18,14 +18,14 @@ const options = {
   credentials: true,
   origin: [
     "http://localhost:3000",
-    "http://localhost:3001",
+    "http://localhost:3003",
     // "https://propshopworldwide.com",
     // "https://dev.propshopworldwide.com",
     "http://admin.thepropshopworldwide.com",
     // "http://localhost:8080",
   ],
 };
-app.options("*", cors());
+app.use("*", cors());
 app.use(
   bodyParser.urlencoded({
     extended: false,

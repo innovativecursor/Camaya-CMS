@@ -65,7 +65,7 @@ function FilterMenu() {
       <div className="container mx-auto p-4 text-xl">
         <Form onFinish={handleSubmit}>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          <div>
+            <div>
               <label
                 htmlFor="name"
                 className="block text-sm font-medium text-gray-700"
@@ -119,7 +119,7 @@ function FilterMenu() {
                 Price
               </label>
               <Select
-                className="basic-single"  
+                className="basic-single"
                 classNamePrefix="select"
                 isClearable={true}
                 isSearchable={true}
@@ -135,8 +135,8 @@ function FilterMenu() {
               />
             </div>
           </div>
-          
-          <div className="actionButtons w-full flex justify-center">
+
+          <div className="actionButtons w-full flex justify-center my-8">
             <button
               className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-indigo-600 hover:to-blue-500 text-white font-semibold py-3 px-6 rounded-full shadow-md transition duration-300 ease-in-out items-center justify-center"
               type="submit"

@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { connect } from "react-redux";
 import CryptoJS from "crypto-js";
-import background from "../../assets/Images/background.jpg";
-import logo from "../../assets/Images/Camaya.svg";
+import background from "../../assets/Images/hero3.svg";
+import logo from "../../../public/vite.svg";
 import { postAxiosCall } from "../../Axios/UniversalAxiosCalls";
 
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
@@ -105,7 +105,7 @@ function Login(props) {
       >
         <div style={{ textAlign: "center", marginBottom: "20px" }}>
           <div className="flex justify-center">
-          <img src={logo} alt="Logo"/>
+            <img src={logo} alt="Logo" width={200} />
           </div>
         </div>
         <div

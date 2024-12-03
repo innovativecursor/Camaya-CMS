@@ -2,9 +2,11 @@
 const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/userController");
-const propertyController = require("../controllers/propertyController");7
-const testimonialController = require("../controllers/testimonialController");7
+const propertyController = require("../controllers/propertyController");
+const testimonialController = require("../controllers/testimonialController");
+const inquiryController = require("../controllers/inquiryController");
 const authenticateUser = require("../middleware/authenticateUser");
+const { apiLimiter } = require("../middleware/apiLimiter");
 
 // User routes
 router.post("/signup", userController.signup);
@@ -24,17 +26,37 @@ router.post(
   authenticateUser,
   propertyController.createProperty
 );
-router.put("/property/:id", authenticateUser, propertyController.updateProperty);
+router.put(
+  "/property/:id",
+  authenticateUser,
+  propertyController.updateProperty
+);
 router.delete(
   "/property/:id",
   authenticateUser,
   propertyController.deleteProperty
 );
+// Inquiry Routes
+router.get(
+  "/fetchInquiries",
+  authenticateUser,
+  inquiryController.fetchInquiries
+);
+router.post(
+  "/sendInquiry",
+  //  apiLimiter,
+  inquiryController.createInquiry
+);
+router.delete(
+  "/deleteInquiry/:id",
+  authenticateUser,
+  inquiryController.deleteInquiry
+);
 // Testimonials
 router.get("/fetchTestimonials", testimonialController.getTestimonials);
 router.post(
   "/createTestimonial",
-  authenticateUser, 
+  authenticateUser,
   testimonialController.createTestimonial
 );
 router.delete(

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
-import logo from "../../assets/Images/Camaya.svg";
+import logo from "../../../public/vite.svg";
 function Navbar(props) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -9,12 +9,12 @@ function Navbar(props) {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
   return (
-    <nav className="bg-gray-500 p-4">
+    <nav className="bg-amber-300 p-4">
       <div className="container mx-auto">
         <div className="flex justify-between items-center">
           {/* Logo or Brand Name */}
           <div className="">
-            <NavLink href="/" className="text-pink-200 text-3xl font-serif ">
+            <NavLink href="/" className="text-black text-3xl font-serif ">
               <img
                 src={logo}
                 className="h-fit"
@@ -22,8 +22,8 @@ function Navbar(props) {
                 loading="eager"
                 priority={true}
                 style={{
-                  // height: "100%",
-                  // width: "100%",
+                  height: "20%",
+                  width: "20%",
                   verticalAlign: "middle",
                   // transform: "scale(6.5)",
                 }}
@@ -57,19 +57,19 @@ function Navbar(props) {
           {/* Desktop Menu */}
 
           <ul className="hidden md:flex space-x-8 text-xl">
-            <div className="text-white">
+            <div className="text-black">
               <p className="font-semibold">
                 Hi, {props.userDetails?.firstName} {props.userDetails?.lastName}
               </p>
             </div>
             <li>
-              <NavLink to="/home" className="text-white">
+              <NavLink to="/home" className="text-black">
                 Home
               </NavLink>
             </li>
 
             <li>
-              <NavLink to="/" className="text-white">
+              <NavLink to="/" className="text-black">
                 Logout
               </NavLink>
             </li>
@@ -80,13 +80,13 @@ function Navbar(props) {
         <div className={`md:hidden ${isMobileMenuOpen ? "block" : "hidden"}`}>
           <ul className="mt-2 space-y-2 text-xl">
             <li>
-              <a href="#" className="text-white">
+              <a href="#" className="text-black">
                 Home
               </a>
             </li>
 
             <li>
-              <a href="#" className="text-white">
+              <a href="#" className="text-black">
                 Logout
               </a>
             </li>

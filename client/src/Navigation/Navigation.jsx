@@ -18,9 +18,7 @@ import ProductTable from "../Components/ProductTable/ProductTable";
 import ViewProp from "../Components/viewProp/ViewProp";
 import UpdateProp from "../Components/updateProp/UpdateProp";
 import Robots from "../Components/Robots/Robots";
-import CatalogueManagement from "../Components/catalogueManagement/CatalogueManagement";
-import CMS from "../Components/cms/CMS";
-import Categories from "../Categories/Categories";
+import Inquiries from "../Components/Inquiries/Inquiries";
 import ResetPassword from "../Components/resetPassword/ResetPassword";
 import FilterMenu from "../Components/filterMenu/FilterMenu";
 import CreateTestimonials from "../Components/createTestimonials/CreateTestimonials";
@@ -57,10 +55,11 @@ function Navigation(props) {
             <Route path="/reset/:token" element={<ResetPassword />} />
             <Route element={<PrivateRoute />}>
               <Route path="/home" element={<Home />} />
+              <Route path="/inquiries" element={<Inquiries />} />
               <Route path="/addproperty" element={<CreateProduct />} />
               <Route
                 path="/deleteproperty"
-                element={<ProductTable pageMode="Delete" type="Property"/>}
+                element={<ProductTable pageMode="Delete" type="Property" />}
               />
               <Route path="/deleteinner" element={<DeleteProp />} />
               <Route
