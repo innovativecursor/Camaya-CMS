@@ -14,7 +14,11 @@ function UpdateProp() {
   }, [location]);
 
   return (
-    <>{record ? <GlobalForm pageMode="Update" record={record} /> : null}</>
+    <>
+      {record ? (
+        <GlobalForm pageMode="Update" record={record} type="Property" />
+      ) : null}
+    </>
   );
 }
 

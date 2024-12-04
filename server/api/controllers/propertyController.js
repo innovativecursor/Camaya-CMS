@@ -2,15 +2,12 @@
 const Property = require("../models/property");
 const { Op } = require("sequelize");
 const cloudinary = require("../../utils/cloudinary");
+const { formattedResult } = require("../utils/Consts");
 
 exports.getProperties = async (req, res) => {
   try {
     // Get query parameters
-    const {
-      prop_name,
-      location,
-      price,
-    } = req.query;
+    const { prop_name, location, price } = req.query;
 
     // Construct the filter object
     let filter = {};
@@ -26,6 +23,7 @@ exports.getProperties = async (req, res) => {
     // });
 
     const properties = await Property.findAll({ where: filter });
+    // const result = formattedResult(properties);
     res.status(200).json({ properties });
   } catch (error) {
     res
@@ -56,13 +54,16 @@ exports.getLocationOptions = async (req, res) => {
       .json({ message: "Failed to fetch locations", error: error.message });
   }
 };
-exports.getPropertyOptions = async (req,res)=>{
+exports.getPropertyOptions = async (req, res) => {
   try {
     // Fetch all unique properties from the Propertys table
     const property = await Property.findAll({
       attributes: [
         [
-          Property.sequelize.fn("DISTINCT", Property.sequelize.col("prop_name")),
+          Property.sequelize.fn(
+            "DISTINCT",
+            Property.sequelize.col("prop_name")
+          ),
           "prop_name",
         ],
       ],
@@ -78,8 +79,8 @@ exports.getPropertyOptions = async (req,res)=>{
       .status(500)
       .json({ message: "Failed to fetch properties", error: error.message });
   }
-}
-exports.getPricingOptions = async (req,res)=>{
+};
+exports.getPricingOptions = async (req, res) => {
   try {
     // Fetch all unique Pricing from the Property table
     const pricing = await Property.findAll({
@@ -101,7 +102,7 @@ exports.getPricingOptions = async (req,res)=>{
       .status(500)
       .json({ message: "Failed to fetch Pricing", error: error.message });
   }
-}
+};
 exports.createProperty = async (req, res) => {
   try {
     const { prop_name, location, price, description, pictures } = req.body;
@@ -113,7 +114,8 @@ exports.createProperty = async (req, res) => {
 
     if (existingProperty) {
       return res.status(400).json({
-        message: "Duplicate entries are not allowed. Property with the same name already exists.",
+        message:
+          "Duplicate entries are not allowed. Property with the same name already exists.",
       });
     }
 
@@ -141,9 +143,10 @@ exports.createProperty = async (req, res) => {
     // Update the property with the uploaded images
     await newProperty.update({ pictures: uploadedImages });
 
-    res
-      .status(201)
-      .json({ message: "Property created successfully!", property: newProperty });
+    res.status(201).json({
+      message: "Property created successfully!",
+      property: newProperty,
+    });
   } catch (error) {
     res
       .status(500)
