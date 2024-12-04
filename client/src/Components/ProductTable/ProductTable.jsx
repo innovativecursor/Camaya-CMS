@@ -142,34 +142,36 @@ function ProductTable(props) {
   const renderTable = () => {
     switch (props.type) {
       case "Property":
-        <PageWrapper title={`${props.pageMode} Properties`}>
-          <Table
-            columns={columns}
-            dataSource={result}
-            size="large"
-            // style={{
-            //   width: "100rem",
-            // }}
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: () => {
-                  navigateTo(
-                    props.pageMode === "View"
-                      ? "/viewinner"
-                      : props.pageMode === "Delete"
-                      ? "/deleteinner"
-                      : "/updateinner",
-                    { state: record }
-                  );
-                },
-              };
-            }}
-            scroll={{
-              x: 1000,
-              y: 1500,
-            }}
-          />
-        </PageWrapper>;
+        return (
+          <PageWrapper title={`${props.pageMode} Properties`}>
+            <Table
+              columns={columns}
+              dataSource={result}
+              size="large"
+              // style={{
+              //   width: "100rem",
+              // }}
+              onRow={(record, rowIndex) => {
+                return {
+                  onClick: () => {
+                    navigateTo(
+                      props.pageMode === "View"
+                        ? "/viewinner"
+                        : props.pageMode === "Delete"
+                        ? "/deleteinner"
+                        : "/updateinner",
+                      { state: record }
+                    );
+                  },
+                };
+              }}
+              scroll={{
+                x: 1000,
+                y: 1500,
+              }}
+            />
+          </PageWrapper>
+        );
       case "Inquiries":
         return (
           <>
