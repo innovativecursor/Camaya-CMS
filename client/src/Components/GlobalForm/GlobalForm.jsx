@@ -76,7 +76,6 @@ function GlobalForm(props) {
       menu_id: val,
     });
     if (resami) {
-      debugger;
       const collection = resami.data?.map((el) => ({
         label: el?.amenity_name,
         value: el?.amenity_name,
@@ -308,9 +307,14 @@ function GlobalForm(props) {
   };
   const remove = async () => {
     let answer;
-    if (props?.type != "Testimonials" && props?.type) {
+    if (props?.type === "Property" && props?.type) {
       answer = await deleteAxiosCall("/property", props?.record?.prop_id);
-    } else {
+    } else if (props?.type === "Amenities") {
+      answer = await deleteAxiosCall(
+        "/deleteAmenity",
+        props?.record?.amenity_id
+      );
+    } else if (props?.type === "Testimonials") {
       answer = await deleteAxiosCall(
         "/deleteTestimonial",
         props?.record?.testimonial_id
@@ -325,7 +329,13 @@ function GlobalForm(props) {
         allowOutsideClick: false,
       });
       setInputs();
-      NavigateTo("/deleteproperty");
+      NavigateTo(
+        props?.type === "Testimonials"
+          ? "/deleteTestimonials"
+          : props?.type === "Property"
+          ? "/deleteproperty"
+          : "/deleteAmenities"
+      );
     }
   };
   const deleteImage = async (imageIndex) => {
@@ -572,6 +582,11 @@ function GlobalForm(props) {
                   </label>
                   <Creatable
                     placeholder="Menu"
+                    isDisabled={
+                      props?.pageMode === "Delete" || props?.pageMode === "View"
+                        ? true
+                        : false
+                    }
                     required
                     isMulti={false}
                     onChange={(e) => {

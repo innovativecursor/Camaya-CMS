@@ -39,14 +39,6 @@ exports.getAmenitiesByMenuId = async (req, res) => {
       },
       attributes: ["amenity_name", "amenity_desc", "pictures"], // Only fetch relevant amenity fields
     });
-
-    // Format the asd
-    // const asd = aminities.map((item) => ({
-    //   menu_name: item.Menu.menu_name, // Access menu_name from included Menu
-    //   amenity_name: item.amenity_name,
-    //   amenity_desc: item.amenity_desc,
-    //   pictures: item.pictures,
-    // }));
     const result = formattedResult(aminities);
     res.status(200).json(result);
   } catch (error) {
@@ -121,50 +113,6 @@ exports.createAmenity = async (req, res) => {
     });
   }
 };
-// exports.updateAmenity = async (req, res) => {
-//   try {
-//     const { amenity_id } = req.params;
-//     const { menu_name, amenity_name, amenity_desc, pictures } = req.body;
-
-//     // Find the existing Amenity by amenity_id
-//     const amenity = await Amenity.findByPk(amenity_id);
-//     if (!amenity) {
-//       return res.status(404).json({
-//         message: "Amenity not found",
-//       });
-//     }
-
-//     // Check if the menu_name exists or create a new one
-//     let menu = await Menu.findOne({
-//       where: Sequelize.where(
-//         Sequelize.fn("LOWER", Sequelize.col("menu_name")),
-//         menu_name.toLowerCase()
-//       ),
-//     });
-
-//     if (!menu) {
-//       menu = await Menu.create({ menu_name });
-//     }
-
-//     // Update the Amenity
-//     amenity.menu_id = menu.menu_id; // Update menu_id if menu_name is changed
-//     if (amenity_name) amenity.amenity_name = amenity_name;
-//     if (amenity_desc) amenity.amenity_desc = amenity_desc;
-//     if (pictures) amenity.pictures = pictures;
-
-//     await amenity.save();
-
-//     res.status(200).json({
-//       message: "Amenity updated successfully",
-//       amenity,
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       message: "Failed to update Amenity",
-//       error: error.message,
-//     });
-//   }
-// };
 exports.updateAmenity = async (req, res) => {
   try {
     const { id } = req.params;
@@ -241,5 +189,53 @@ exports.updateAmenity = async (req, res) => {
       message: "Failed to update Amenity",
       error: error.message,
     });
+  }
+};
+exports.deleteAmenity = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Find the amenity by ID
+    const amenity = await Amenity.findByPk(id);
+    if (!amenity) {
+      return res.status(404).json({ message: "Amenity not found" });
+    }
+
+    // Extract the pictures array from the amenity
+    const { pictures } = amenity;
+
+    // If there are pictures, proceed with deleting them from Cloudinary
+    if (pictures && pictures.length > 0) {
+      const folderName = pictures[0]?.folder;
+
+      // Delete all pictures associated with the amenity
+      const deletePromises = pictures.map((picture) =>
+        cloudinary.uploader.destroy(picture.public_id)
+      );
+      await Promise.all(deletePromises);
+
+      // Check if there are any remaining files in the folder and delete them
+      const filesInFolder = await cloudinary.api.resources({
+        type: "upload",
+        prefix: folderName,
+      });
+
+      const deleteFilePromises = filesInFolder.resources.map((file) =>
+        cloudinary.uploader.destroy(file.public_id)
+      );
+      await Promise.all(deleteFilePromises);
+
+      // Finally, delete the folder itself
+      await cloudinary.api.delete_folder(folderName);
+    }
+
+    // Delete the amenity from the database
+    await amenity.destroy();
+
+    res.status(200).json({ message: "Amenity deleted successfully" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Failed to delete amenity", error: error.message });
   }
 };

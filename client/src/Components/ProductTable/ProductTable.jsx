@@ -205,9 +205,6 @@ function ProductTable(props) {
               columns={amenities_col}
               dataSource={result}
               size="large"
-              // style={{
-              //   width: "100rem",
-              // }}
               onRow={(record, rowIndex) => {
                 return {
                   onClick: () => {

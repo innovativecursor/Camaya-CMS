@@ -99,7 +99,7 @@ function Navigation(props) {
               />
               <Route
                 path="/deleteAmenities"
-                element={<ProductTable pageMode="delete" type="Amenities" />}
+                element={<ProductTable pageMode="Delete" type="Amenities" />}
               />
               <Route
                 path="/deleteAmenitiesinner"

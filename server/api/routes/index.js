@@ -87,5 +87,10 @@ router.put(
   authenticateUser,
   amenityController.updateAmenity
 );
+router.delete(
+  "/deleteAmenity/:id",
+  authenticateUser,
+  amenityController.deleteAmenity
+);
 
 module.exports = router;

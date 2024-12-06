@@ -43,6 +43,10 @@ const menu = [
     text: "Update Amenities",
     link: "/updateAmenities",
   },
+  {
+    text: "Delete Amenities",
+    link: "/deleteAmenities",
+  },
 ];
 function SideDrawer() {
   const [open, setOpen] = useState(false);
