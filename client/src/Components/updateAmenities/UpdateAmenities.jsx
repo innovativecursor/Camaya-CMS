@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import GlobalForm from "../GlobalForm/GlobalForm";
 
-function UpdateProp() {
+function UpdateAmenities() {
   const location = useLocation();
   const [record, setRecord] = useState(location.state);
   useEffect(() => {
@@ -16,10 +16,10 @@ function UpdateProp() {
   return (
     <>
       {record ? (
-        <GlobalForm pageMode="Update" record={record} type="Property" />
+        <GlobalForm pageMode="Update" record={record} type="Amenities" />
       ) : null}
     </>
   );
 }
 
-export default UpdateProp;
+export default UpdateAmenities;

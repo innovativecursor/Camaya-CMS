@@ -5,6 +5,7 @@ const userController = require("../controllers/userController");
 const propertyController = require("../controllers/propertyController");
 const testimonialController = require("../controllers/testimonialController");
 const inquiryController = require("../controllers/inquiryController");
+const amenityController = require("../controllers/amenityController");
 const authenticateUser = require("../middleware/authenticateUser");
 const { apiLimiter } = require("../middleware/apiLimiter");
 
@@ -64,4 +65,32 @@ router.delete(
   authenticateUser,
   testimonialController.deleteTestimonial
 );
+//Aminities
+router.get(
+  "/fetchMenuItems",
+  authenticateUser,
+  amenityController.getMenuOptions
+);
+router.get("/fetchAmenities", authenticateUser, amenityController.getAmenities);
+router.get(
+  "/getAmenitiesByMenuId",
+  authenticateUser,
+  amenityController.getAmenitiesByMenuId
+);
+router.post(
+  "/createAmenity",
+  authenticateUser,
+  amenityController.createAmenity
+);
+router.put(
+  "/updateAmenity/:id",
+  authenticateUser,
+  amenityController.updateAmenity
+);
+router.delete(
+  "/deleteAmenity/:id",
+  authenticateUser,
+  amenityController.deleteAmenity
+);
+
 module.exports = router;

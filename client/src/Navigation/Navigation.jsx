@@ -24,6 +24,9 @@ import FilterMenu from "../Components/filterMenu/FilterMenu";
 import CreateTestimonials from "../Components/createTestimonials/CreateTestimonials";
 import DeleteTestimonials from "../Components/DeleteTestimonials/DeleteTestimonials";
 import CreateProduct from "../Components/createProp/CreateProperty";
+import CreateAmenities from "../Components/createAmenities/CreateAmenities";
+import Updateamenities from "../Components/updateAmenities/UpdateAmenities";
+import DeleteAmenities from "../Components/deleteAmenities/DeleteAmenities";
 
 function Navigation(props) {
   const location = useLocation();
@@ -84,6 +87,23 @@ function Navigation(props) {
               <Route
                 path="/deleteTestimonialsinner"
                 element={<DeleteTestimonials />}
+              />
+              <Route path="/createAmenities" element={<CreateAmenities />} />
+              <Route
+                path="/updateAmenities"
+                element={<ProductTable pageMode="Update" type="Amenities" />}
+              />
+              <Route
+                path="/updateAmenitiesinner"
+                element={<Updateamenities />}
+              />
+              <Route
+                path="/deleteAmenities"
+                element={<ProductTable pageMode="Delete" type="Amenities" />}
+              />
+              <Route
+                path="/deleteAmenitiesinner"
+                element={<DeleteAmenities />}
               />
             </Route>
             <Route path="*" element={<Robots />} />
