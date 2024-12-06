@@ -66,17 +66,9 @@ router.delete(
   testimonialController.deleteTestimonial
 );
 //Aminities
-router.get(
-  "/fetchMenuItems",
-  authenticateUser,
-  amenityController.getMenuOptions
-);
-router.get("/fetchAmenities", authenticateUser, amenityController.getAmenities);
-router.get(
-  "/getAmenitiesByMenuId",
-  authenticateUser,
-  amenityController.getAmenitiesByMenuId
-);
+router.get("/fetchMenuItems", amenityController.getMenuOptions);
+router.get("/fetchAmenities", amenityController.getAmenities);
+router.get("/getAmenitiesByMenuId", amenityController.getAmenitiesByMenuId);
 router.post(
   "/createAmenity",
   authenticateUser,
