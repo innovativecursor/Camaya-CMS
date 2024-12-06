@@ -9,16 +9,15 @@ const Inquiry = sequelize.define("Inquiry", {
   },
   name: {
     type: DataTypes.STRING,
-    allowNull:false
+    allowNull: false,
   },
   email: {
     type: DataTypes.STRING,
-    allowNull:false
-
+    allowNull: false,
   },
   mobile_number: {
     type: DataTypes.STRING,
-    allowNull:false
+    allowNull: false,
   },
   message: {
     type: DataTypes.STRING,

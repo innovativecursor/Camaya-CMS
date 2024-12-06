@@ -37,7 +37,7 @@ export let postAxiosCall = async (endpoint, data) => {
     return;
   }
 };
-export let getAxiosCall = async (endpoint, data) => {
+export let getAxiosCall = async (endpoint, params = {}) => {
   try {
     store.dispatch({ type: "LOADING", payload: true });
     let res = null;
@@ -48,6 +48,7 @@ export let getAxiosCall = async (endpoint, data) => {
     };
     const request = {
       headers: _headers,
+      params,
     };
 
     await axios
@@ -80,51 +81,7 @@ export let getAxiosCall = async (endpoint, data) => {
     });
   }
 };
-// export let deleteAxiosCall = async (endpoint,id, data) => {
-//   try {
-//     store.dispatch({ type: "LOADING", payload: true });
-//     let res = null;
-//     const _headers = {
-//       "Content-Type": "application/x-www-form-urlencoded",
-//       Accept: "*/*",
-//       Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-//     };
-//     const request = {
-//       headers: _headers,
-//     };
 
-//     `${process.env.REACT_APP_UAT_URL}${endpoint}/${data}`;
-
-//     await axios
-//       .delete(`${process.env.REACT_APP_UAT_URL}${endpoint}/${data}`, request)
-//       .then((response) => {
-//         if (response.status) {
-//           res = response;
-//         }
-//       })
-//       .catch(function (error) {
-//         Swal.fire({
-//           title: "Error",
-//           text: error?.response?.data?.message,
-//           icon: "error",
-//           confirmButtonText: "Alright!",
-//           allowOutsideClick: false,
-//         });
-//       });
-//     store.dispatch({ type: "LOADING", payload: false });
-
-//     return res;
-//   } catch (error) {
-//     store.dispatch({ type: "LOADING", payload: false });
-//     Swal.fire({
-//       title: "Error",
-//       text: error,
-//       icon: "error",
-//       confirmButtonText: "Alright!",
-//       allowOutsideClick: false,
-//     });
-//   }
-// };
 export let updateAxiosCall = async (endpoint, id, data) => {
   try {
     store.dispatch({ type: "LOADING", payload: true });

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import GlobalForm from "../GlobalForm/GlobalForm";
-import { Button, Modal, Table } from "antd";
+import { Button, Menu, Modal, Table } from "antd";
 import PageWrapper from "../PageContainer/PageWrapper";
 import { deleteAxiosCall, getAxiosCall } from "../../Axios/UniversalAxiosCalls";
 import { useNavigate } from "react-router-dom";
@@ -91,11 +91,28 @@ function ProductTable(props) {
       key: "reviewer_name",
     },
   ];
+  const amenities_col = [
+    {
+      title: "Amenity Id",
+      dataIndex: "amenity_id",
+      key: "amenity_id",
+      fixed: "left",
+    },
+    {
+      title: "Name of the Menu",
+      dataIndex: "menu_name",
+      key: "menu_name",
+    },
+    {
+      title: "Name of the Amenity",
+      dataIndex: "amenity_name",
+      key: "amenity_name",
+    },
+  ];
   const [result, setResult] = useState(null);
   const [switchRoutes, setSwitchRoutes] = useState(false);
   const navigateTo = useNavigate();
   const deleteInquiry = async (id) => {
-    debugger;
     try {
       Swal.fire({
         title: "info",
@@ -132,16 +149,23 @@ function ProductTable(props) {
       const result = await getAxiosCall("/fetchTestimonials");
       setResult(result?.data);
     } else if (props?.type == "Property" && props?.type) {
-      debugger;
       const result = await getAxiosCall("/properties");
       setResult(result?.data?.properties);
     } else if (props?.type == "Inquiries" && props?.type) {
       const result = await getAxiosCall("/fetchInquiries");
       setResult(result?.data);
+    } else if (props?.type == "Amenities" && props?.type) {
+      const result = await getAxiosCall("/fetchAmenities");
+      let flattenedResult = result?.data?.result?.map((el) => ({
+        ...el,
+        menu_name: el.Menu.menu_name,
+        menu_id: el.Menu.menu_id,
+        Menu: undefined, // Remove the Menu object
+      }));
+      setResult(flattenedResult);
     }
   };
   const renderTable = () => {
-    debugger;
     switch (props.type) {
       case "Property":
         return (
@@ -162,6 +186,35 @@ function ProductTable(props) {
                         : props.pageMode === "Delete"
                         ? "/deleteinner"
                         : "/updateinner",
+                      { state: record }
+                    );
+                  },
+                };
+              }}
+              scroll={{
+                x: 1000,
+                y: 1500,
+              }}
+            />
+          </PageWrapper>
+        );
+      case "Amenities":
+        return (
+          <PageWrapper title={`${props.pageMode} Amenities`}>
+            <Table
+              columns={amenities_col}
+              dataSource={result}
+              size="large"
+              // style={{
+              //   width: "100rem",
+              // }}
+              onRow={(record, rowIndex) => {
+                return {
+                  onClick: () => {
+                    navigateTo(
+                      props.pageMode === "Delete"
+                        ? "/deleteAmenitiesinner"
+                        : "/updateAmenitiesinner",
                       { state: record }
                     );
                   },
