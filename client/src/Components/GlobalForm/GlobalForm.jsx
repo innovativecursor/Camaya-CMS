@@ -512,7 +512,7 @@ function GlobalForm(props) {
                       multiple={false}
                       name="productImages"
                       fileList={imageArray}
-                      maxCount={1}
+                      maxCount={4}
                       onChange={(e) => {
                         setImageArray(e.fileList);
                       }}
