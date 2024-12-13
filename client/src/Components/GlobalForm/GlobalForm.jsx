@@ -34,8 +34,8 @@ function GlobalForm(props) {
   const [loading, setLoading] = useState(false);
   const [imageArray, setImageArray] = useState([]);
   const [inputs, setInputs] = useState({});
-  const [locationOptions, setLocationOptions] = useState();
-  const [pricingOptions, setPricingOptions] = useState();
+  const [location, setLocation] = useState({});
+  const [stationOptions, setStationOptions] = useState();
   const [imageClone, setImageClone] = useState(props?.record?.pictures);
   const [menuOptions, setMenuOptions] = useState([]);
   const [amenities, setAmenities] = useState();
@@ -63,13 +63,13 @@ function GlobalForm(props) {
   };
   const callingOptions = async () => {
     if (props?.type != "Amenities") {
-      const resLocation = await getAxiosCall("/locationOptions");
+      const resLocation = await getAxiosCall("/stationOptions");
       if (resLocation) {
         const collection = resLocation.data?.map((el) => ({
           label: el,
           value: el,
         }));
-        setLocationOptions(collection);
+        setStationOptions(collection);
       }
     } else {
       const resMenuOptions = await getAxiosCall("/fetchMenuItems");
@@ -153,10 +153,10 @@ function GlobalForm(props) {
   // A submit form used for both (i.e.. Products & Awards)
   const submitForm = async () => {
     if (!props.type) {
-      if (!inputs?.prop_name || !inputs?.location || !inputs?.price) {
+      if (!inputs?.station_number || !inputs?.location) {
         Swal.fire({
           title: "error",
-          text: "Property Name, Location and Price are mandatory fields",
+          text: "Station Name and Location are mandatory fields",
           icon: "error",
           confirmButtonText: "Alright!",
           allowOutsideClick: false,
@@ -425,7 +425,7 @@ function GlobalForm(props) {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
-                      Property
+                      Location
                     </label>
                     <Input
                       disabled={
@@ -436,9 +436,9 @@ function GlobalForm(props) {
                       }
                       required
                       type="text"
-                      id="prop_name"
-                      placeholder="Property Name"
-                      name="prop_name"
+                      id="location"
+                      placeholder="Enter Name of the Location Example: Mariveles,Batan"
+                      name="location"
                       className="mt-1 p-2 block w-full border rounded-md"
                       onChange={(e) => {
                         setInputs({
@@ -446,7 +446,7 @@ function GlobalForm(props) {
                           [e.target.name]: e.target.value,
                         });
                       }}
-                      value={inputs?.prop_name}
+                      value={inputs?.location}
                     />
                   </div>
 
@@ -455,7 +455,7 @@ function GlobalForm(props) {
                       htmlFor="name"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Location
+                      Station Number
                     </label>
                     <Creatable
                       isDisabled={
@@ -464,77 +464,37 @@ function GlobalForm(props) {
                           ? true
                           : false
                       }
-                      placeholder="Location"
+                      placeholder="Add Station Number"
                       required
                       isMulti={false}
                       onChange={(e) => {
-                        setInputs({ ...inputs, location: e.value });
+                        if (e && /^[0-9]*$/.test(e.value)) {
+                          setInputs({
+                            ...inputs,
+                            station_number: Number(e.value),
+                          });
+                        } else {
+                          // Optional: Notify the user about invalid input
+                          console.error("Only numeric values are allowed");
+                        }
                       }}
                       isClearable
                       options={
-                        locationOptions?.length != 0 ? locationOptions : []
+                        stationOptions?.length !== 0 ? stationOptions : []
                       }
                       isSearchable
                       value={{
-                        label: inputs?.location,
-                        value: inputs?.location,
+                        label: inputs?.station_number,
+                        value: inputs?.station_number,
+                      }}
+                      formatCreateLabel={(inputValue) => {
+                        // Prevent creating non-numeric options
+                        return /^[0-9]*$/.test(inputValue)
+                          ? inputValue
+                          : "Invalid input";
                       }}
                     />
                   </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      Price/SQM
-                    </label>
-                    <InputNumber
-                      disabled={
-                        props?.pageMode === "Delete" ||
-                        props?.pageMode === "View"
-                          ? true
-                          : false
-                      }
-                      formatter={(value) =>
-                        `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                      }
-                      parser={(value) => value?.replace(/\$\s?|(,*)/g, "")}
-                      placeholder="Price"
-                      className="w-full rounded-md"
-                      size="large"
-                      required
-                      isMulti={false}
-                      onChange={(e) => {
-                        setInputs({ ...inputs, price: e });
-                      }}
-                      isClearable
-                      options={
-                        pricingOptions?.length != 0 ? pricingOptions : []
-                      }
-                      isSearchable
-                      value={inputs?.price}
-                    />
-                  </div>
-                </div>
-
-                <div className="my-5">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Description
-                  </label>
-                  <TextArea
-                    disabled={
-                      props?.pageMode === "Delete" || props?.pageMode === "View"
-                        ? true
-                        : false
-                    }
-                    type="text"
-                    id="description"
-                    name="description"
-                    className="mt-1 p-2 block w-full border rounded-md"
-                    style={{ minHeight: "15rem" }}
-                    onChange={(e) => {
-                      setInputs({ ...inputs, [e.target.name]: e.target.value });
-                    }}
-                    value={inputs?.description}
-                  />
                 </div>
                 {/* Upload Pictures */}
                 {props.pageMode === "Add" || props.pageMode === "Update" ? (
@@ -581,7 +541,7 @@ function GlobalForm(props) {
                     >
                       Pictures
                     </label>
-                    <div className="w-full flex flex-row">
+                    <div className="grid grid-cols-1 lg:grid lg:grid-cols-3 gap-y-4 gap-x-4">
                       {imageClone?.map((el, index) => (
                         <div className="card" key={index}>
                           <div className="flex h-60 justify-center">
@@ -846,8 +806,7 @@ function GlobalForm(props) {
                   >
                     Pictures
                   </label>
-                  {/* <div className="w-full flex flex-row"> */}
-                  <div className="grid grid-cols-1 lg:grid lg:grid-cols-3 gap-y-4">
+                  <div className="grid grid-cols-1 lg:grid lg:grid-cols-3 gap-y-4 gap-x-4">
                     {imageClone?.map((el, index) => (
                       <div className="card" key={index}>
                         <div className="flex h-60 justify-center">

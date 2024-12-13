@@ -18,9 +18,7 @@ router.post("/resetPassword", userController.resetPassword);
 router.get("/users", authenticateUser, userController.allUsers);
 
 //For Selectable Options
-router.get("/propertyOptions", propertyController.getPropertyOptions);
-router.get("/locationOptions", propertyController.getLocationOptions);
-router.get("/pricingOptions", propertyController.getPricingOptions);
+router.get("/stationOptions", propertyController.getStationOptions);
 // Property routes
 router.get("/properties", propertyController.getProperties);
 router.post(

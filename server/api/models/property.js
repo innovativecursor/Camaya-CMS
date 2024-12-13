@@ -11,19 +11,14 @@ const Property = sequelize.define(
       defaultValue: DataTypes.UUIDV4,
       allowNull: false,
     },
-    prop_name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     location: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    price: {
+    station_number: {
       type: DataTypes.INTEGER,
-      defaultValue: 0,
+      allowNull: false,
     },
-    description: DataTypes.TEXT,
     pictures: { type: DataTypes.JSON, allowNull: false },
   },
   {

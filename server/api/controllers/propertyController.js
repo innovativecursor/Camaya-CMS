@@ -7,13 +7,12 @@ const { formattedResult } = require("../utils/Consts");
 exports.getProperties = async (req, res) => {
   try {
     // Get query parameters
-    const { prop_name, location, price } = req.query;
+    // const { station_number, location, price } = req.query;
 
     // Construct the filter object
-    let filter = {};
-    if (prop_name) filter.prop_name = prop_name;
-    if (location) filter.location = location;
-    if (price) filter.price = price;
+    // let filter = {};
+    // if (location) filter.location = location;
+    // if (station_number) filter.station_number = station_number;
 
     // Add functional requirements to the filter
     // Object.keys(functionalReq).forEach((key) => {
@@ -22,7 +21,7 @@ exports.getProperties = async (req, res) => {
     //   }
     // });
 
-    const result = await Property.findAll({ where: filter });
+    const result = await Property.findAll({});
 
     const properties = await formattedResult(result);
     res.status(200).json({ properties });
@@ -32,85 +31,88 @@ exports.getProperties = async (req, res) => {
       .json({ message: "Failed to fetch properties", error: error.message });
   }
 };
-exports.getLocationOptions = async (req, res) => {
+exports.getStationOptions = async (req, res) => {
   try {
-    // Fetch all unique locations from the Propertys table
-    const locations = await Property.findAll({
-      attributes: [
-        [
-          Property.sequelize.fn("DISTINCT", Property.sequelize.col("location")),
-          "location",
-        ],
-      ],
-      order: [["location", "ASC"]],
-    });
-
-    // Extract the locations from the result
-    const locationList = locations.map((loc) => loc.location);
-
-    res.status(200).json(locationList);
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Failed to fetch locations", error: error.message });
-  }
-};
-exports.getPropertyOptions = async (req, res) => {
-  try {
-    // Fetch all unique properties from the Propertys table
-    const property = await Property.findAll({
+    // Fetch all unique stations from the Propertys table
+    const stations = await Property.findAll({
       attributes: [
         [
           Property.sequelize.fn(
             "DISTINCT",
-            Property.sequelize.col("prop_name")
+            Property.sequelize.col("station_number")
           ),
-          "prop_name",
+          "station_number",
         ],
       ],
-      order: [["prop_name", "ASC"]],
+      order: [["station_number", "ASC"]],
     });
 
-    // Extract the property from the result
-    const propertyList = property.map((el) => el.prop_name);
+    // Extract the stations from the result
+    const stationList = stations.map((loc) => loc.location);
 
-    res.status(200).json(propertyList);
+    res.status(200).json(stationList);
   } catch (error) {
     res
       .status(500)
-      .json({ message: "Failed to fetch properties", error: error.message });
+      .json({ message: "Failed to fetch stations", error: error.message });
   }
 };
-exports.getPricingOptions = async (req, res) => {
-  try {
-    // Fetch all unique Pricing from the Property table
-    const pricing = await Property.findAll({
-      attributes: [
-        [
-          Property.sequelize.fn("DISTINCT", Property.sequelize.col("price")),
-          "price",
-        ],
-      ],
-      order: [["price", "ASC"]],
-    });
+// exports.getPropertyOptions = async (req, res) => {
+//   try {
+//     // Fetch all unique properties from the Propertys table
+//     const property = await Property.findAll({
+//       attributes: [
+//         [
+//           Property.sequelize.fn(
+//             "DISTINCT",
+//             Property.sequelize.col("prop_name")
+//           ),
+//           "prop_name",
+//         ],
+//       ],
+//       order: [["prop_name", "ASC"]],
+//     });
 
-    // Extract the Pricing from the result
-    const pricingList = pricing.map((el) => el.price);
+//     // Extract the property from the result
+//     const propertyList = property.map((el) => el.prop_name);
 
-    res.status(200).json(pricingList);
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Failed to fetch Pricing", error: error.message });
-  }
-};
+//     res.status(200).json(propertyList);
+//   } catch (error) {
+//     res
+//       .status(500)
+//       .json({ message: "Failed to fetch properties", error: error.message });
+//   }
+// };
+// exports.getPricingOptions = async (req, res) => {
+//   try {
+//     // Fetch all unique Pricing from the Property table
+//     const pricing = await Property.findAll({
+//       attributes: [
+//         [
+//           Property.sequelize.fn("DISTINCT", Property.sequelize.col("price")),
+//           "price",
+//         ],
+//       ],
+//       order: [["price", "ASC"]],
+//     });
+
+//     // Extract the Pricing from the result
+//     const pricingList = pricing.map((el) => el.price);
+
+//     res.status(200).json(pricingList);
+//   } catch (error) {
+//     res
+//       .status(500)
+//       .json({ message: "Failed to fetch Pricing", error: error.message });
+//   }
+// };
 exports.createProperty = async (req, res) => {
   try {
-    const { prop_name, location, price, description, pictures } = req.body;
+    const { location, station_number, pictures } = req.body;
 
     // Check for duplicate property by name
     const existingProperty = await Property.findOne({
-      where: { prop_name },
+      where: { location },
     });
 
     if (existingProperty) {
@@ -122,10 +124,8 @@ exports.createProperty = async (req, res) => {
 
     // Create the property in the database
     const newProperty = await Property.create({
-      prop_name,
       location,
-      price,
-      description,
+      station_number,
       pictures: [], // Initialize as empty array; update later after image upload
     });
 
@@ -154,85 +154,8 @@ exports.createProperty = async (req, res) => {
       .json({ message: "Failed to create property", error: error.message });
   }
 };
-
-// Update a property
-// exports.updateProperty = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const updatedData = req.body;
-
-//     // Find the existing property
-//     const property = await Property.findByPk(id);
-//     if (!property) {
-//       return res.status(404).json({ message: "Property not found" });
-//     }
-
-//     // Generate the folder name based on the property ID
-//     const folderName = `${process.env.CLOUDINARY_DB_DEV}/property_${id}`;
-
-//     // Fetch existing images from Cloudinary
-//     const cloudinaryFiles = await cloudinary.api.resources({
-//       type: "upload",
-//       prefix: folderName,
-//     });
-
-//     // Extract the public IDs of the existing pictures in Cloudinary
-//     const cloudinaryPublicIds = cloudinaryFiles.resources.map(
-//       (file) => file.public_id
-//     );
-
-//     // Identify and delete pictures from Cloudinary that are not in the new set
-//     const updatedPublicIds = updatedData.pictures
-//       .map((pic) => pic.public_id)
-//       .filter(Boolean); // Filter out undefined or null public_ids
-//     const deletePromises = cloudinaryPublicIds
-//       .filter((publicId) => !updatedPublicIds.includes(publicId))
-//       .map((publicId) => cloudinary.uploader.destroy(publicId));
-
-//     await Promise.all(deletePromises);
-
-//     // Upload new images that don't have a public_id
-//     const uploadPromises = updatedData.pictures
-//       .filter((pic) => typeof pic === "string") // Only process new base64 images
-//       .map((base64Data) =>
-//         cloudinary.uploader.upload(base64Data, {
-//           folder: folderName,
-//         })
-//       );
-
-//     const uploadedImages = await Promise.all(uploadPromises);
-
-//     // Combine the existing valid images with the newly uploaded images
-//     const allImages = [
-//       ...updatedData.pictures.filter((pic) => typeof pic !== "string"), // Keep existing images
-//       ...uploadedImages,
-//     ];
-
-//     // Update the pictures in the updatedData
-//     updatedData.pictures = allImages;
-
-//     // Update the property with new data and pictures
-//     await property.update(updatedData);
-
-//     res.status(200).json({ message: "Property updated successfully", property });
-//   } catch (error) {
-//     res
-//       .status(500)
-//       .json({ message: "Failed to update property", error: error.message });
-//   }
-// };
 exports.updateProperty = async (req, res) => {
   const { id } = req.params;
-
-  // Validate the incoming request data
-  //   const { error } = validateBlog(req.body);
-  //   if (error) {
-  //     return res.status(400).json({
-  //       message: "Please Fill in all the Fields",
-  //       error: error.details[0].message,
-  //     });
-  //   }
-
   try {
     const updatedData = req.body;
 
@@ -285,57 +208,6 @@ exports.updateProperty = async (req, res) => {
       .json({ message: "Failed to update Property", error: error.message });
   }
 };
-// Delete a property
-// exports.deleteProperty = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-
-//     const property = await Property.findByPk(id);
-//     if (!property) {
-//       return res.status(404).json({ message: "Property not found" });
-//     }
-
-//     // Extract the pictures array from the property
-//     const { pictures } = property;
-//     // Extract the folder name from the first picture URL (assuming they all belong to the same folder)
-//     const folderName = pictures[0].folder;
-//     // Create a list of promises to delete each image from Cloudinary
-//     const deletePromises = pictures.map((picture) => {
-//       // Extract the public_id from the picture URL
-//       const publicId = picture.public_id;
-//       return cloudinary.uploader.destroy(publicId);
-//     });
-
-//     // Wait for all images to be deleted from Cloudinary
-//     await Promise.all(deletePromises);
-
-//     // Get a list of all files within the folder
-//     const filesInFolder = await cloudinary.api.resources({
-//       type: "upload",
-//       prefix: folderName,
-//     });
-
-//     // Create a list of promises to delete each file within the folder
-//     const deleteFilePromises = filesInFolder.resources.map((file) => {
-//       return cloudinary.uploader.destroy(file.public_id);
-//     });
-
-//     // Wait for all files to be deleted from Cloudinary
-//     await Promise.all(deleteFilePromises);
-
-//     // Delete the folder in Cloudinary
-//     await cloudinary.api.delete_folder(folderName);
-
-//     // Delete the property from the database
-//     await property.destroy();
-
-//     res.status(200).json({ message: "Property deleted successfully" });
-//   } catch (error) {
-//     res
-//       .status(500)
-//       .json({ message: "Failed to delete property", error: error.message });
-//   }
-// };
 exports.deleteProperty = async (req, res) => {
   try {
     const { id } = req.params;

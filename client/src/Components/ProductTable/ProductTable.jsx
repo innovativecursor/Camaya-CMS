@@ -64,18 +64,13 @@ function ProductTable(props) {
     },
     {
       title: "Property Name",
-      dataIndex: "prop_name",
-      key: "prop_name",
+      dataIndex: "station_number",
+      key: "station_number",
     },
     {
       title: "Location",
       dataIndex: "location",
       key: "location",
-    },
-    {
-      title: "Price",
-      dataIndex: "price",
-      key: "price",
     },
   ];
 
