@@ -13,44 +13,25 @@ exports.getHero = async (req, res) => {
       direction: "asc", // Fetch images in ascending order (oldest first)
     });
 
-    // Format the fetched images to include transformed 'secure_url'
-    let formattedImages = result?.resources?.map((image) => {
-      return {
-        public_id: image?.public_id,
-        url: cloudinary.url(image?.public_id, {
-          transformation: [
-            { width: 800, height: 600, crop: "limit", quality: "best" },
-            { fetch_format: "webp" }, // Convert to WebP format
-          ],
-        }),
-        // Apply transformations for WebP format, compression, and optimization
-        secure_url: cloudinary.url(image?.public_id, {
-          transformation: [
-            { width: 800, height: 600, crop: "limit", quality: "best" },
-            { fetch_format: "webp" }, // Convert to WebP format
-          ],
-        }),
-      };
-    });
     // Sort images by 'created_at' in ascending order (oldest first)
     const sortedImages = result.resources.sort(
       (a, b) => new Date(a.created_at) - new Date(b.created_at)
     );
 
     // Format the fetched and sorted images
-    formattedImages = sortedImages.map((image) => {
+    let formattedImages = sortedImages.map((image) => {
       return {
         public_id: image.public_id,
         created_at: image.created_at,
         url: cloudinary.url(image.public_id, {
           transformation: [
-            { width: 800, height: 600, crop: "limit", quality: "auto" },
+            { width: 1080, height: 1920, crop: "limit", quality: 100 },
             { fetch_format: "webp" }, // Convert to WebP format
           ],
         }),
         secure_url: cloudinary.url(image.public_id, {
           transformation: [
-            { width: 800, height: 600, crop: "limit", quality: "auto" },
+            { width: 1080, height: 1920, crop: "limit", quality: 100 },
             { fetch_format: "webp" },
           ],
         }),
