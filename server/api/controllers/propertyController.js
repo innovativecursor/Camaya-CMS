@@ -48,7 +48,7 @@ exports.getStationOptions = async (req, res) => {
     });
 
     // Extract the stations from the result
-    const stationList = stations.map((loc) => loc.location);
+    const stationList = stations.map((loc) => loc.station_number);
 
     res.status(200).json(stationList);
   } catch (error) {
