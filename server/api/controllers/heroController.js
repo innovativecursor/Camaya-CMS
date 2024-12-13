@@ -19,14 +19,14 @@ exports.getHero = async (req, res) => {
         public_id: image?.public_id,
         url: cloudinary.url(image?.public_id, {
           transformation: [
-            { width: 800, height: 600, crop: "limit", quality: "auto" },
+            { width: 800, height: 600, crop: "limit", quality: "best" },
             { fetch_format: "webp" }, // Convert to WebP format
           ],
         }),
         // Apply transformations for WebP format, compression, and optimization
         secure_url: cloudinary.url(image?.public_id, {
           transformation: [
-            { width: 800, height: 600, crop: "limit", quality: "auto" },
+            { width: 800, height: 600, crop: "limit", quality: "best" },
             { fetch_format: "webp" }, // Convert to WebP format
           ],
         }),
