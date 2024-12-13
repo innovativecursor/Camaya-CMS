@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import GlobalForm from "../GlobalForm/GlobalForm";
-import { Button, Menu, Modal, Table } from "antd";
+import { Button, Input, Menu, Modal, Table } from "antd";
 import PageWrapper from "../PageContainer/PageWrapper";
 import { deleteAxiosCall, getAxiosCall } from "../../Axios/UniversalAxiosCalls";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { SearchOutlined } from "@ant-design/icons";
 
 function ProductTable(props) {
   const [openModal, setopenModal] = useState(false);
@@ -77,6 +78,7 @@ function ProductTable(props) {
       key: "price",
     },
   ];
+
   const testimonials_col = [
     {
       title: "Testimonial Id",
@@ -102,13 +104,110 @@ function ProductTable(props) {
       title: "Name of the Menu",
       dataIndex: "menu_name",
       key: "menu_name",
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Search Menu Name"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            onPressEnter={() => confirm()}
+            style={{ marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            onClick={() => confirm()}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters()}
+            size="small"
+            style={{ width: 90, marginTop: 4 }}
+          >
+            Reset
+          </Button>
+        </div>
+      ),
+      onFilter: (value, record) =>
+        record.menu_name
+          ?.toString()
+          .toLowerCase()
+          .includes(value.toLowerCase()),
     },
     {
       title: "Name of the Amenity",
       dataIndex: "amenity_name",
       key: "amenity_name",
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+      }) => (
+        <div style={{ padding: 8 }}>
+          <Input
+            placeholder="Search Amenity Name"
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            onPressEnter={() => confirm()}
+            style={{ marginBottom: 8, display: "block" }}
+          />
+          <Button
+            type="primary"
+            onClick={() => confirm()}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters()}
+            size="small"
+            style={{ width: 90, marginTop: 4 }}
+          >
+            Reset
+          </Button>
+        </div>
+      ),
+      onFilter: (value, record) =>
+        record.amenity_name
+          ?.toString()
+          .toLowerCase()
+          .includes(value.toLowerCase()),
     },
   ];
+
+  useEffect(() => {
+    if (props?.type === "Amenities") {
+      fetchAmenities();
+    }
+  }, [props]);
+
+  const fetchAmenities = async () => {
+    const result = await getAxiosCall("/fetchAmenities");
+    let flattenedResult = result?.data?.result?.map((el) => ({
+      ...el,
+      menu_name: el.Menu.menu_name,
+      menu_id: el.Menu.menu_id,
+      Menu: undefined, // Remove the Menu object
+    }));
+    setResult(flattenedResult);
+    setFilteredData(flattenedResult); // Initialize filtered data
+  };
+
   const [result, setResult] = useState(null);
   const [switchRoutes, setSwitchRoutes] = useState(false);
   const navigateTo = useNavigate();
