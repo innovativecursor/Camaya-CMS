@@ -512,7 +512,7 @@ function GlobalForm(props) {
                       multiple={false}
                       name="productImages"
                       fileList={imageArray}
-                      maxCount={4}
+                      maxCount={1}
                       onChange={(e) => {
                         setImageArray(e.fileList);
                       }}
@@ -775,7 +775,7 @@ function GlobalForm(props) {
                     multiple={false}
                     name="productImages"
                     fileList={imageArray}
-                    maxCount={4}
+                    maxCount={1}
                     beforeUpload={beforeUpload} // Add the beforeUpload function
                     accept=".png, .jpg, .jpeg, .webp" // Restrict file types for the file dialog
                     onChange={(e) => {

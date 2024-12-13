@@ -14,7 +14,7 @@ exports.getHero = async (req, res) => {
     });
 
     // Format the fetched images to include transformed 'secure_url'
-    const formattedImages = result?.resources?.map((image) => {
+    let formattedImages = result?.resources?.map((image) => {
       return {
         public_id: image?.public_id,
         url: cloudinary.url(image?.public_id, {
@@ -32,7 +32,30 @@ exports.getHero = async (req, res) => {
         }),
       };
     });
+    // Sort images by 'created_at' in ascending order (oldest first)
+    const sortedImages = result.resources.sort(
+      (a, b) => new Date(a.created_at) - new Date(b.created_at)
+    );
 
+    // Format the fetched and sorted images
+    formattedImages = sortedImages.map((image) => {
+      return {
+        public_id: image.public_id,
+        created_at: image.created_at,
+        url: cloudinary.url(image.public_id, {
+          transformation: [
+            { width: 800, height: 600, crop: "limit", quality: "auto" },
+            { fetch_format: "webp" }, // Convert to WebP format
+          ],
+        }),
+        secure_url: cloudinary.url(image.public_id, {
+          transformation: [
+            { width: 800, height: 600, crop: "limit", quality: "auto" },
+            { fetch_format: "webp" },
+          ],
+        }),
+      };
+    });
     res.status(200).json(formattedImages);
   } catch (error) {
     res
