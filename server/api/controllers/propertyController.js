@@ -21,7 +21,9 @@ exports.getProperties = async (req, res) => {
     //   }
     // });
 
-    const result = await Property.findAll({});
+    const result = await Property.findAll({
+      order: [["station_number", "ASC"]], // Ordering by station_number in ascending order
+    });
 
     const properties = await formattedResult(result);
     res.status(200).json({ properties });
