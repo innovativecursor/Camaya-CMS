@@ -7,6 +7,7 @@ const testimonialController = require("../controllers/testimonialController");
 const inquiryController = require("../controllers/inquiryController");
 const amenityController = require("../controllers/amenityController");
 const authenticateUser = require("../middleware/authenticateUser");
+const heroController = require("../controllers/heroController");
 const { apiLimiter } = require("../middleware/apiLimiter");
 
 // User routes
@@ -64,6 +65,15 @@ router.delete(
   "/deleteTestimonial/:id",
   authenticateUser,
   testimonialController.deleteTestimonial
+);
+// Hero Routes
+// Hero routes
+router.get("/fetchHero", heroController.getHero);
+router.post("/updateHero", authenticateUser, heroController.updateHero);
+router.delete(
+  "/deleteHero/:public_id(*)",
+  authenticateUser,
+  heroController.deleteHero
 );
 //Aminities
 router.get("/fetchMenuItems", amenityController.getMenuOptions);

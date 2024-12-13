@@ -13,7 +13,13 @@ function ViewProp() {
     }
   }, [location]);
 
-  return <>{record ? <GlobalForm pageMode="View" record={record} /> : null}</>;
+  return (
+    <>
+      {record ? (
+        <GlobalForm pageMode="View" record={record} type="Property" />
+      ) : null}
+    </>
+  );
 }
 
 export default ViewProp;

@@ -27,6 +27,7 @@ import CreateProduct from "../Components/createProp/CreateProperty";
 import CreateAmenities from "../Components/createAmenities/CreateAmenities";
 import Updateamenities from "../Components/updateAmenities/UpdateAmenities";
 import DeleteAmenities from "../Components/deleteAmenities/DeleteAmenities";
+import Hero from "../Components/HeroSection/Hero";
 
 function Navigation(props) {
   const location = useLocation();
@@ -69,13 +70,16 @@ function Navigation(props) {
                 path="/viewproperty"
                 element={<ProductTable pageMode="View" type="Property" />}
               />
+              <Route
+                path="/heroSection"
+                element={<Hero pageMode="Update" type="Hero" />}
+              />
               <Route path="/viewinner" element={<ViewProp />} />
               <Route
                 path="/updateproperty"
                 element={<ProductTable pageMode="Update" type="Property" />}
               />
               <Route path="/updateinner" element={<UpdateProp />} />
-              <Route path="/filtermenu" element={<FilterMenu />} />
               <Route
                 path="/createTestimonials"
                 element={<CreateTestimonials />}

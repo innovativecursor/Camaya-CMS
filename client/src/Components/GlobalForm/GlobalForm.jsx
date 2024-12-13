@@ -48,8 +48,19 @@ function GlobalForm(props) {
     if (props?.record) {
       setInputs(props.record);
     }
+    if (props?.type == "Hero") {
+      callHero();
+    }
   }, []);
-
+  // useEffect(() => {
+  //   if (props?.type == "Hero") {
+  //     callHero();
+  //   }
+  // }, [props?.type]);
+  const callHero = async () => {
+    const answer = await getAxiosCall("/fetchHero");
+    setImageClone(answer?.data);
+  };
   const callingOptions = async () => {
     if (props?.type != "Amenities") {
       const resLocation = await getAxiosCall("/locationOptions");
@@ -124,11 +135,18 @@ function GlobalForm(props) {
           const base64String = await getBase64(imageArray[i]?.originFileObj);
           B64Array.push(base64String);
         }
-        let dummyObj = [...(inputs && inputs?.pictures)];
+        if (props?.type == "Hero") {
+          let dummyObj = { pictures: [...B64Array] };
 
-        dummyObj = [...dummyObj, ...B64Array];
-        asd = Object.assign(inputs, { pictures: dummyObj });
-        setInputs({ ...inputs, pictures: asd });
+          asd = Object.assign(inputs, { pictures: dummyObj?.pictures });
+          setInputs({ ...inputs, pictures: asd });
+        } else {
+          let dummyObj = [...(inputs && inputs?.pictures)];
+
+          dummyObj = [...dummyObj, ...B64Array];
+          asd = Object.assign(inputs, { pictures: dummyObj });
+          setInputs({ ...inputs, pictures: asd });
+        }
       }
     }
   };
@@ -277,6 +295,21 @@ function GlobalForm(props) {
               });
             }
           }
+          if (props.type == "Hero") {
+            let answer = await postAxiosCall("/updateHero", inputs);
+            if (answer) {
+              Swal.fire({
+                title: "Success",
+                text: answer?.message,
+                icon: "success",
+                confirmButtonText: "Great!",
+                allowOutsideClick: false,
+              }).then(() => {
+                window.location.reload(true);
+              });
+              setInputs({});
+            }
+          }
           break;
         case "Delete":
           Swal.fire({
@@ -320,6 +353,7 @@ function GlobalForm(props) {
         props?.record?.testimonial_id
       );
     }
+
     if (answer) {
       Swal.fire({
         title: "Success",
@@ -339,6 +373,25 @@ function GlobalForm(props) {
     }
   };
   const deleteImage = async (imageIndex) => {
+    let answer = await deleteAxiosCall(
+      "/deleteHero",
+      imageClone[imageIndex]?.public_id
+    );
+
+    if (answer) {
+      Swal.fire({
+        title: "Success",
+        text: answer?.message,
+        icon: "success",
+        confirmButtonText: "Great!",
+        allowOutsideClick: false,
+      }).then(() => {
+        window.location.reload(true);
+      });
+      setInputs({});
+    }
+  };
+  const deleteFnc = async (imageIndex) => {
     const dupli = inputs?.pictures;
     dupli?.splice(imageIndex, 1);
     setInputs({ ...inputs, pictures: dupli });
@@ -353,7 +406,11 @@ function GlobalForm(props) {
       allowOutsideClick: false,
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteImage(index);
+        if (props?.type == "Hero") {
+          deleteImage(index);
+        } else {
+          deleteFnc(index);
+        }
       }
     });
   };
@@ -692,6 +749,105 @@ function GlobalForm(props) {
                     Pictures
                   </label>
                   <div className="w-full flex flex-row">
+                    {imageClone?.map((el, index) => (
+                      <div className="card" key={index}>
+                        <div className="flex h-60 justify-center">
+                          <img
+                            src={el?.url}
+                            alt="asd4e"
+                            className="object-contain"
+                          />
+                        </div>
+                        {props.pageMode !== "View" &&
+                        props.pageMode !== "Delete" ? (
+                          <div className="flex flex-row justify-center items-end">
+                            <button
+                              className="my-4 text-black p-4 font-semibold bg-orange-400 hover:text-white rounded-lg"
+                              onClick={() => deleteModal(index)}
+                              type="button"
+                            >
+                              Delete Picture
+                            </button>
+                          </div>
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                ""
+              )}
+              {props.pageMode === "View" ? (
+                ""
+              ) : (
+                <div className="acitonButtons w-full flex justify-center">
+                  <button
+                    className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-indigo-600 hover:to-blue-500 text-white font-semibold py-3 px-6 rounded-full shadow-md transition duration-300 ease-in-out items-center justify-center"
+                    type="submit"
+                  >
+                    {props.pageMode} Data
+                  </button>
+                </div>
+              )}
+            </Form>
+          </div>
+        </PageWrapper>
+      ) : props?.type === "Hero" ? (
+        <PageWrapper title={`${props?.pageMode} Pictures`}>
+          <div className="container mx-auto p-4 text-xl">
+            <Form onFinish={submitForm}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
+              {/* Upload Pictures */}
+              {props.pageMode === "Add" || props.pageMode === "Update" ? (
+                <div className="my-5">
+                  <label
+                    htmlFor="name"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Upload Pictures
+                  </label>
+                  <Upload
+                    action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                    // action="/upload.do"
+                    listType="picture-card"
+                    multiple={false}
+                    name="productImages"
+                    fileList={imageArray}
+                    maxCount={4}
+                    beforeUpload={beforeUpload} // Add the beforeUpload function
+                    accept=".png, .jpg, .jpeg, .webp" // Restrict file types for the file dialog
+                    onChange={(e) => {
+                      setImageArray(e.fileList);
+                    }}
+                  >
+                    <div>
+                      <PlusOutlined />
+                      <div
+                        style={{
+                          marginTop: 8,
+                        }}
+                      >
+                        Upload
+                      </div>
+                    </div>
+                  </Upload>
+                </div>
+              ) : (
+                ""
+              )}
+              {/* Pictures */}
+              {props?.pageMode !== "Add" ? (
+                <div className="my-5">
+                  <label
+                    htmlFor="name"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Pictures
+                  </label>
+                  {/* <div className="w-full flex flex-row"> */}
+                  <div className="grid grid-cols-1 lg:grid lg:grid-cols-3 gap-y-4">
                     {imageClone?.map((el, index) => (
                       <div className="card" key={index}>
                         <div className="flex h-60 justify-center">

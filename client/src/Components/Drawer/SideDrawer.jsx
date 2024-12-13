@@ -1,11 +1,18 @@
 import React, { useState } from "react";
-import { Button, Drawer, Radio, Space } from "antd";
+import { Button, Collapse, Drawer, Radio, Space } from "antd";
 import { FaArrowRight } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
+import { Menu } from "../../Constants/Conts";
+const { Panel } = Collapse;
+
 const menu = [
   {
     text: "Inquiries",
     link: "/inquiries",
+  },
+  {
+    text: "Hero Section",
+    link: "/heroSection",
   },
   {
     text: "Add Property",
@@ -22,10 +29,6 @@ const menu = [
   {
     text: "View Properties",
     link: "/viewproperty",
-  },
-  {
-    text: "Filter Menu",
-    link: "/filtermenu",
   },
   {
     text: "Add Testimonials",
@@ -79,20 +82,34 @@ function SideDrawer() {
             <Button onClick={onClose}>Close Menu</Button>
           </Space>
         }
+        bodyStyle={{ padding: 0 }} // This removes padding in inline styles
+        className="!p-0" // This removes padding using Tailwind's utility class with important
       >
-        <ul>
-          {menu.map((el) => {
-            return (
-              <li onClick={onClose}>
-                <NavLink to={el.link}>
-                  <div className="card hover:bg-blue-300 hover:text-white text-xl font-medium my-8">
-                    {el.text}
-                  </div>
-                </NavLink>
-              </li>
-            );
-          })}
-        </ul>
+        <Collapse accordion className="!not-sr-onlyp-0">
+          {Object.entries(Menu).map(([key, actions]) => (
+            <Panel
+              header={
+                <div className="text-lg font-semibold text-blue-600">
+                  {key.charAt(0).toUpperCase() + key.slice(1)}
+                </div>
+              }
+              key={key}
+              className="bg-white border-0 rounded-lg mb-2"
+            >
+              <ul>
+                {actions.map((el) => (
+                  <li key={el.link} onClick={onClose}>
+                    <NavLink to={el.link}>
+                      <div className="card hover:bg-blue-300 hover:text-white text-xl font-medium my-8">
+                        {el.text}
+                      </div>
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            </Panel>
+          ))}
+        </Collapse>
       </Drawer>
     </>
   );
