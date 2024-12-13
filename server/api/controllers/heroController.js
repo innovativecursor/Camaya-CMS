@@ -5,11 +5,12 @@ exports.getHero = async (req, res) => {
   try {
     const folderName = `${process.env.CLOUDINARY_DB}/Hero`;
 
-    // Fetch all images from the specified folder in Cloudinary
+    // Fetch all images from the specified folder in Cloudinary, sorted by oldest first
     const result = await cloudinary.api.resources({
       type: "upload",
       prefix: folderName,
       max_results: 500, // Adjust as needed
+      direction: "asc", // Fetch images in ascending order (oldest first)
     });
 
     // Format the fetched images to include transformed 'secure_url'
