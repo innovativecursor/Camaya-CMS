@@ -25,14 +25,19 @@ exports.getHero = async (req, res) => {
         created_at: image.created_at,
         url: cloudinary.url(image.public_id, {
           transformation: [
-            { width: 1080, height: 1920, crop: "limit", quality: 100 },
-            { fetch_format: "webp" }, // Convert to WebP format
+            { width: "auto", dpr: "auto", crop: "scale" },
+            { fetch_format: "auto", quality: "auto:best" },
+            { flags: "progressive" },
+            // { width: 1080, height: 1920, crop: "limit", quality: 100 },
+            // { fetch_format: "webp" }, // Convert to WebP format
           ],
         }),
         secure_url: cloudinary.url(image.public_id, {
           transformation: [
             { width: 1080, height: 1920, crop: "limit", quality: 100 },
-            { fetch_format: "webp" },
+            { fetch_format: "auto", quality: "auto:best" },
+            { flags: "progressive" },
+            // { fetch_format: "webp" },
           ],
         }),
       };
