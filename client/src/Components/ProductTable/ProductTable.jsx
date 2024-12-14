@@ -3,7 +3,7 @@ import GlobalForm from "../GlobalForm/GlobalForm";
 import { Button, Input, Menu, Modal, Table } from "antd";
 import PageWrapper from "../PageContainer/PageWrapper";
 import { deleteAxiosCall, getAxiosCall } from "../../Axios/UniversalAxiosCalls";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { SearchOutlined } from "@ant-design/icons";
 
@@ -218,11 +218,8 @@ function ProductTable(props) {
       }).then((result) => {
         if (result.isConfirmed) {
           deleteAxiosCall("/deleteInquiry", id);
+          navigateTo("/inquiries");
           message.success("Inquiry deleted successfully");
-          answer(); // Refresh the data after deletion
-          setTimeout(() => {
-            window.location.reload(true);
-          }, 1000);
         }
       });
     } catch (error) {
