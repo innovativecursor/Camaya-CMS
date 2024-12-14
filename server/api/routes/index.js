@@ -42,11 +42,7 @@ router.get(
   authenticateUser,
   inquiryController.fetchInquiries
 );
-router.post(
-  "/sendInquiry",
-  //  apiLimiter,
-  inquiryController.createInquiry
-);
+router.post("/sendInquiry", apiLimiter, inquiryController.createInquiry);
 router.delete(
   "/deleteInquiry/:id",
   authenticateUser,
