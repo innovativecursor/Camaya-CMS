@@ -30,17 +30,31 @@ exports.getAmenitiesByMenuId = async (req, res) => {
   try {
     const { menu_id } = req.query;
 
+    //#region Returning Amenities
     // Fetch aminities along with menu_name
-    const aminities = await Amenity.findAll({
+    // const aminities = await Amenity.findAll({
+    //   where: { menu_id },
+    //   include: {
+    //     model: Menu,
+    //     attributes: ["menu_name", "menu_id"], // Fetch menu_name from Menu model
+    //   },
+    //   attributes: ["amenity_name", "amenity_desc", "pictures"], // Only fetch relevant amenity fields
+    // });
+    // const result = formattedResult(aminities);
+    // res.status(200).json(result);
+    //#endregion
+    //#region Returing distinct Amenities
+    const distinctAmenities = await Amenity.findAll({
       where: { menu_id },
-      include: {
-        model: Menu,
-        attributes: ["menu_name", "menu_id"], // Fetch menu_name from Menu model
-      },
-      attributes: ["amenity_name", "amenity_desc", "pictures"], // Only fetch relevant amenity fields
+      attributes: [
+        [
+          Sequelize.fn("DISTINCT", Sequelize.col("amenity_name")),
+          "amenity_name",
+        ],
+      ],
     });
-    const result = formattedResult(aminities);
-    res.status(200).json(result);
+
+    res.status(200).json(distinctAmenities);
   } catch (error) {
     res
       .status(500)
