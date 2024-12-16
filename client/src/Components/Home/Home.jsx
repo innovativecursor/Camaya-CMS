@@ -46,12 +46,6 @@ function Home(props) {
 
     setResults(res.data?.users);
   };
-  const logOut = async () => {
-    window.localStorage.clear();
-    localStorage.removeItem("access_token");
-    navigateTo("/");
-    props.loggedOut();
-  };
   return (
     <div className="flex flex-col">
       <div className="flex justify-center my-8">
@@ -62,11 +56,7 @@ function Home(props) {
         </h1>
       </div>
 
-      <div className="flex justify-center items-center">
-        <Button type="primary" onClick={logOut} className="text-black">
-          Log out
-        </Button>
-      </div>
+      <div className="flex justify-center items-center"></div>
       <div className="flex justify-center items-center">
         <Button type="primary" onClick={fetchRes} className="text-black">
           Click to Check Users

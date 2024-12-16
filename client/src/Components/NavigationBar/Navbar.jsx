@@ -8,6 +8,12 @@ function Navbar(props) {
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
+  const logOut = async () => {
+    window.localStorage.clear();
+    localStorage.removeItem("access_token");
+    navigateTo("/");
+    props.loggedOut();
+  };
   return (
     <nav className="bg-amber-300 p-4">
       <div className="container mx-auto">
@@ -69,7 +75,7 @@ function Navbar(props) {
             </li>
 
             <li>
-              <NavLink to="/" className="text-black">
+              <NavLink to="/" className="text-black" onClick={logOut}>
                 Logout
               </NavLink>
             </li>
