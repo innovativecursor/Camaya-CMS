@@ -47,7 +47,7 @@ exports.createInquiry = async (req, res) => {
     });
 
     const mailOptions = {
-      to: process.env.EMAIL,
+      to: process.env.TOEMAIL,
       from: email,
       subject: "Enrollment Form Inquiry",
       text: `

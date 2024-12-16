@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { postAxiosCall } from "../../Axios/UniversalAxiosCalls";
 import { Button, Input } from "antd";
 import Swal from "sweetalert2";
-import logo from "../../assets/Images/propshop_black.svg";
+import logo from "../../../public/vite.svg";
 import background from "../../assets/Images/background.jpg";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 
