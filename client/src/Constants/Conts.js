@@ -4,8 +4,8 @@ export const Menu = {
   properties: [
     { text: "Add Property", link: "/addproperty" },
     { text: "Update Property", link: "/updateproperty" },
-    { text: "Delete Property", link: "/deleteproperty" },
     { text: "View Properties", link: "/viewproperty" },
+    { text: "Delete Property", link: "/deleteproperty" },
   ],
   testimonials: [
     { text: "Add Testimonials", link: "/createTestimonials" },

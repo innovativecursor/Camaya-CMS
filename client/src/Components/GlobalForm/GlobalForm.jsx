@@ -449,7 +449,6 @@ function GlobalForm(props) {
                       value={inputs?.location}
                     />
                   </div>
-
                   <div>
                     <label
                       htmlFor="name"
@@ -493,6 +492,32 @@ function GlobalForm(props) {
                           ? inputValue
                           : "Invalid input";
                       }}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Availability Map (URL/Link)
+                    </label>
+                    <Input
+                      disabled={
+                        props?.pageMode === "Delete" ||
+                        props?.pageMode === "View"
+                          ? true
+                          : false
+                      }
+                      required
+                      type="text"
+                      id="link"
+                      placeholder="Paste the Link to the Gdrive over here"
+                      name="link"
+                      className="mt-1 p-2 block w-full border rounded-md"
+                      onChange={(e) => {
+                        setInputs({
+                          ...inputs,
+                          [e.target.name]: e.target.value,
+                        });
+                      }}
+                      value={inputs?.link}
                     />
                   </div>
                 </div>

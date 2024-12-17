@@ -19,6 +19,13 @@ const Property = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    link: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      validate: {
+        isUrl: true,
+      },
+    },
     pictures: { type: DataTypes.JSON, allowNull: false },
   },
   {

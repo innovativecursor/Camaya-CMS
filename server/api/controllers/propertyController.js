@@ -110,7 +110,7 @@ exports.getStationOptions = async (req, res) => {
 // };
 exports.createProperty = async (req, res) => {
   try {
-    const { location, station_number, pictures } = req.body;
+    const { location, station_number, link, pictures } = req.body;
 
     // Check for duplicate property by name
     const existingProperty = await Property.findOne({
@@ -128,6 +128,7 @@ exports.createProperty = async (req, res) => {
     const newProperty = await Property.create({
       location,
       station_number,
+      link,
       pictures: [], // Initialize as empty array; update later after image upload
     });
 

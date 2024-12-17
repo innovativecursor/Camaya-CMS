@@ -45,7 +45,7 @@ app.use("/", routes);
 // Sync models with the database
 (async () => {
   try {
-    await sequelize.sync({ alter: false, force: false }); // This will force drop existing tables and recreate new ones
+    await sequelize.sync({ alter: true, force: false }); // This will force drop existing tables and recreate new ones
     console.log("Database synchronized");
   } catch (error) {
     console.error("Unable to sync database:", error);
