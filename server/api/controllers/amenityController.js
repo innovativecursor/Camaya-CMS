@@ -255,17 +255,17 @@ exports.deleteAmenity = async (req, res) => {
 };
 const deleteUnusedMenus = async () => {
   try {
-    // Find all Menu IDs that have no associated Projects
+    // Find all Menu IDs that have no associated Amenity
     const unusedMenus = await Menu.findAll({
       include: [
         {
-          model: Project,
-          attributes: [], // No need to fetch Project data
-          required: false, // LEFT JOIN: Include even if no Projects exist
+          model: Amenity,
+          attributes: [], // No need to fetch Amenity data
+          required: false, // LEFT JOIN: Include even if no Amenity exist
         },
       ],
       where: {
-        "$Projects.project_id$": { [Op.is]: null }, // Check where no Projects are associated
+        "$Amenity.amenity_id$": { [Op.is]: null }, // Check where no Amenitys are associated
       },
     });
 
