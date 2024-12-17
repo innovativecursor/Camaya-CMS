@@ -184,25 +184,6 @@ function ProductTable(props) {
           .includes(value.toLowerCase()),
     },
   ];
-
-  useEffect(() => {
-    if (props?.type === "Amenities") {
-      fetchAmenities();
-    }
-  }, [props]);
-
-  const fetchAmenities = async () => {
-    const result = await getAxiosCall("/fetchAmenities");
-    let flattenedResult = result?.data?.result?.map((el) => ({
-      ...el,
-      menu_name: el.Menu.menu_name,
-      menu_id: el.Menu.menu_id,
-      Menu: undefined, // Remove the Menu object
-    }));
-    setResult(flattenedResult);
-    setFilteredData(flattenedResult); // Initialize filtered data
-  };
-
   const [result, setResult] = useState(null);
   const [switchRoutes, setSwitchRoutes] = useState(false);
   const navigateTo = useNavigate();

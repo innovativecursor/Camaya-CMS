@@ -193,7 +193,7 @@ exports.updateAmenity = async (req, res) => {
     amenity.pictures = allImages;
 
     await amenity.save();
-
+    deleteUnusedMenus();
     res.status(200).json({
       message: "Amenity updated successfully",
       amenity,
@@ -245,11 +245,45 @@ exports.deleteAmenity = async (req, res) => {
 
     // Delete the amenity from the database
     await amenity.destroy();
-
+    deleteUnusedMenus();
     res.status(200).json({ message: "Amenity deleted successfully" });
   } catch (error) {
     res
       .status(500)
       .json({ message: "Failed to delete amenity", error: error.message });
+  }
+};
+const deleteUnusedMenus = async () => {
+  try {
+    // Find all Menu IDs that have no associated Projects
+    const unusedMenus = await Menu.findAll({
+      include: [
+        {
+          model: Project,
+          attributes: [], // No need to fetch Project data
+          required: false, // LEFT JOIN: Include even if no Projects exist
+        },
+      ],
+      where: {
+        "$Projects.project_id$": { [Op.is]: null }, // Check where no Projects are associated
+      },
+    });
+
+    // Extract unused Menu IDs
+    const unusedMenuIds = unusedMenus.map((menu) => menu.menu_id);
+
+    if (unusedMenuIds.length > 0) {
+      // Delete unused Menu records
+      await Menu.destroy({
+        where: {
+          menu_id: { [Op.in]: unusedMenuIds },
+        },
+      });
+      console.log(`Deleted unused Menus: ${unusedMenuIds.join(", ")}`);
+    } else {
+      console.log("No unused Menus to delete.");
+    }
+  } catch (error) {
+    console.error("Error deleting unused Menus:", error.message);
   }
 };
