@@ -196,9 +196,9 @@ function ProductTable(props) {
         confirmButtonText: "Delete",
         showCancelButton: true,
         allowOutsideClick: false,
-      }).then((result) => {
+      }).then(async (result) => {
         if (result.isConfirmed) {
-          deleteAxiosCall("/deleteInquiry", id);
+          await deleteAxiosCall("/deleteInquiry", id);
           navigateTo("/inquiries");
           message.success("Inquiry deleted successfully");
         }
